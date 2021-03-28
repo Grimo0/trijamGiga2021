@@ -1,0 +1,5 @@
+placeholders
+ui
+fx
+entities
+decor

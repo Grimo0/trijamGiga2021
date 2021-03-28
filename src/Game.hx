@@ -12,28 +12,102 @@ class Game extends Process {
 	public var level : Level;
 	public var hud : ui.Hud;
 
-	var curGameSpeed = 1.0;
+	public var curGameSpeed(default, null) = 1.0;
+
 	var slowMos : Map<String, {id : String, t : Float, f : Float}> = new Map();
+
+	public var locked = false;
+
+	public var started(default, null) = false;
+
+	var sav : GameSave = new GameSave();
+
+	var flags : Map<String, Int> = new Map();
 
 	public function new() {
 		super(Main.ME);
 		ME = this;
+
 		ca = Main.ME.controller.createAccess("game");
 		ca.setLeftDeadZone(0.2);
 		ca.setRightDeadZone(0.2);
-		createRootInLayers(Main.ME.root, Const.DP_BG);
+
+		createRootInLayers(Main.ME.root, Const.MAIN_LAYER_GAME);
 
 		scroller = new h2d.Layers();
-		root.add(scroller, Const.DP_BG);
-		scroller.filter = new h2d.filter.ColorMatrix(); // force rendering for pixel perfect
+		root.add(scroller, Const.GAME_SCROLLER);
 
 		camera = new Camera();
+		camera.frict = 0.1;
+		camera.targetS = 0.1;
 		level = new Level();
 		fx = new Fx();
 		hud = new ui.Hud();
 
 		Process.resizeAll();
-		trace(Lang.t._("Game is ready."));
+
+		root.alpha = 0;
+		startLevel();
+		tw.createS(root.alpha, 1, #if debug 0 #else 1 #end);
+	}
+
+	public function load() {
+		sav = hxd.Save.load(sav, 'save/game');
+
+		flags = sav.flags.copy();
+	}
+
+	public function save() {
+		sav.flags = flags.copy();
+		sav.levelUID = level.uniqId;
+
+		hxd.Save.save(sav, 'save/game');
+	}
+
+	public inline function setFlag(k : String, ?v = 1) flags.set(k, v);
+
+	public inline function unsetFlag(k : String) flags.remove(k);
+
+	public inline function hasFlag(k : String) return getFlag(k) != 0;
+
+	public inline function getFlag(k : String) {
+		var f = flags.get(k);
+		return f != null ? f : 0;
+	}
+
+	function startLevel(?levelUID : Int) {
+		locked = false;
+		started = false;
+
+		scroller.removeChildren();
+
+		level.currLevel = Assets.world.getLevel(levelUID != null ? levelUID : sav.levelUID);
+
+		resume();
+		Process.resizeAll();
+	}
+
+	public function transition(levelUID : Null<Int>, event : String = null, ?onDone : Void->Void) {
+		locked = true;
+
+		Main.ME.tw.createS(root.alpha, 0, #if debug 0 #else 1 #end).onEnd = function() {
+			if (levelUID == null) {
+				save();
+
+				Main.ME.startMainMenu();
+			} else {
+				startLevel(levelUID);
+
+				var level = Assets.world.getLevel(levelUID);
+				flags.set(level.identifier, 1);
+				save();
+
+				Main.ME.tw.createS(root.alpha, 1, #if debug 0 #else 1 #end);
+			}
+
+			if (onDone != null)
+				onDone();
+		}
 	}
 
 	public function onCdbReload() {}
@@ -111,18 +185,28 @@ class Game extends Process {
 	override function update() {
 		super.update();
 
+		if (!started) {
+			if (ca.startPressed()) {
+				started = true;
+			}
+		}
+
 		for (e in Entity.ALL)
 			if (!e.destroyed)
 				e.update();
+
+		#if debug
+		if (Main.ME.debug) {
+			updateImGui();
+		}
+		#end
 
 		if (!ui.Console.ME.isActive() && !ui.Modal.hasAny()) {
 			#if hl
 			// Exit
 			if (ca.isKeyboardPressed(Key.ESCAPE)) {
-				if (!cd.hasSetS("exitWarn", 3))
-					trace(Lang.t._("Press ESCAPE again to exit."));
-				else
-					hxd.System.exit();
+				if (cd.hasSetS("exitWarn", 3))
+					return Main.ME.startMainMenu();
 			}
 			#end
 
@@ -131,6 +215,25 @@ class Game extends Process {
 				Main.ME.startGame();
 		}
 	}
+
+	#if debug
+	function updateImGui() {
+		var natArray = new hl.NativeArray<Single>(1);
+
+		natArray[0] = Const.MAX_CELLS_PER_WIDTH;
+		if (ImGui.sliderFloat('Const.MAX_CELLS_PER_WIDTH', natArray, 0, 100, '%.0f')) {
+			Const.MAX_CELLS_PER_WIDTH = Std.int(natArray[0]);
+			Const.SCALE = w() / (Const.MAX_CELLS_PER_WIDTH * level.gridSize);
+			scroller.setScale(Const.SCALE);
+		}
+
+		var scenes = Assets.world.levels;
+		ImGui.comboWithArrow('currScene', Assets.world.levels.indexOf(level.currLevel), scenes,
+			(i : Int) -> Assets.world.levels[i].identifier,
+			(i : Int) -> transition(Assets.world.levels[i].uid));
+		ImGui.separator();
+	}
+	#end
 
 	override function postUpdate() {
 		super.postUpdate();
@@ -146,6 +249,5 @@ class Game extends Process {
 		// Update slow-motions
 		updateSlowMos();
 		setTimeMultiplier((0.2 + 0.8 * curGameSpeed) * (ucd.has("stopFrame") ? 0.3 : 1));
-		Assets.tiles.tmod = tmod;
 	}
 }

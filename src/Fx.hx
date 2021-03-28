@@ -20,24 +20,24 @@ class Fx extends dn.Process {
 	public function new() {
 		super(Game.ME);
 
-		pool = new ParticlePool(Assets.tiles.tile, 2048, Const.FPS);
+		pool = new ParticlePool(Assets.fx.tile, 2048, Const.FPS);
 
-		bgAddSb = new h2d.SpriteBatch(Assets.tiles.tile);
-		game.scroller.add(bgAddSb, Const.DP_FX_BG);
+		bgAddSb = new h2d.SpriteBatch(Assets.fx.tile);
+		game.scroller.add(bgAddSb, Const.GAME_SCROLLER_FX_BG);
 		bgAddSb.blendMode = Add;
 		bgAddSb.hasRotationScale = true;
 
-		bgNormalSb = new h2d.SpriteBatch(Assets.tiles.tile);
-		game.scroller.add(bgNormalSb, Const.DP_FX_BG);
+		bgNormalSb = new h2d.SpriteBatch(Assets.fx.tile);
+		game.scroller.add(bgNormalSb, Const.GAME_SCROLLER_FX_BG);
 		bgNormalSb.hasRotationScale = true;
 
-		topAddSb = new h2d.SpriteBatch(Assets.tiles.tile);
-		game.scroller.add(topAddSb, Const.DP_FX_FRONT);
+		topAddSb = new h2d.SpriteBatch(Assets.fx.tile);
+		game.scroller.add(topAddSb, Const.GAME_SCROLLER_FX_FRONT);
 		topAddSb.blendMode = Add;
 		topAddSb.hasRotationScale = true;
 
-		topNormalSb = new h2d.SpriteBatch(Assets.tiles.tile);
-		game.scroller.add(topNormalSb, Const.DP_FX_FRONT);
+		topNormalSb = new h2d.SpriteBatch(Assets.fx.tile);
+		game.scroller.add(topNormalSb, Const.GAME_SCROLLER_FX_FRONT);
 		topNormalSb.hasRotationScale = true;
 	}
 
@@ -72,7 +72,7 @@ class Fx extends dn.Process {
 	}
 
 	public inline function getTile(id : String) : h2d.Tile {
-		return Assets.tiles.getTileRandom(id);
+		return Assets.fx.getTileRandom(id);
 	}
 
 	public function killAll() {
@@ -90,12 +90,12 @@ class Fx extends dn.Process {
 
 	public function markerCell(cx : Int, cy : Int, ?sec = 3.0, ?c = 0xFF00FF) {
 		#if debug
-		var p = allocTopAdd(getTile("fxCircle"), (cx + 0.5) * Const.GRID, (cy + 0.5) * Const.GRID);
+		var p = allocTopAdd(getTile("fxCircle"), (cx + 0.5) * level.gridSize, (cy + 0.5) * level.gridSize);
 		p.setFadeS(1, 0, 0.06);
 		p.colorize(c);
 		p.lifeS = sec;
 
-		var p = allocTopAdd(getTile("pixel"), (cx + 0.5) * Const.GRID, (cy + 0.5) * Const.GRID);
+		var p = allocTopAdd(getTile("pixel"), (cx + 0.5) * level.gridSize, (cy + 0.5) * level.gridSize);
 		p.setFadeS(1, 0, 0.06);
 		p.colorize(c);
 		p.setScale(2);
@@ -119,7 +119,7 @@ class Fx extends dn.Process {
 		var tf = new h2d.Text(Assets.fontTiny, topNormalSb);
 		tf.text = txt;
 
-		var p = allocTopAdd(getTile("fxCircle"), (cx + 0.5) * Const.GRID, (cy + 0.5) * Const.GRID);
+		var p = allocTopAdd(getTile("fxCircle"), (cx + 0.5) * level.gridSize, (cy + 0.5) * level.gridSize);
 		p.colorize(0x0080FF);
 		p.alpha = 0.6;
 		p.lifeS = 0.3;
@@ -131,12 +131,12 @@ class Fx extends dn.Process {
 	}
 
 	inline function collides(p : HParticle, offX = 0., offY = 0.) {
-		return level.hasCollision(Std.int((p.x + offX) / Const.GRID), Std.int((p.y + offY) / Const.GRID));
+		return level.hasCollision(Std.int((p.x + offX) / level.gridSize), Std.int((p.y + offY) / level.gridSize));
 	}
 
 	public function flashBangS(c : UInt, a : Float, ?t = 0.1) {
 		var e = new h2d.Bitmap(h2d.Tile.fromColor(c, 1, 1, a));
-		game.root.add(e, Const.DP_FX_FRONT);
+		game.root.add(e, Const.GAME_SCROLLER_FX_FRONT);
 		e.scaleX = game.w();
 		e.scaleY = game.h();
 		e.blendMode = Add;

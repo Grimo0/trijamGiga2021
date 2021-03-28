@@ -32,13 +32,13 @@ class Entity {
 	public var cx = 0;
 	public var cy = 0;
 	public var xr = 0.5;
-	public var yr = 1.0;
-	public var hei(default, set) : Float = Const.GRID;
+	public var yr = 0.5;
+	public var hei(default, set) : Float = game.level.gridSize;
 	inline function set_hei(v) {
 		invalidateDebugBounds = true;
 		return hei = v;
 	}
-	public var radius(default, set) = Const.GRID * 0.5;
+	public var radius(default, set) = game.level.gridSize * 0.5;
 	inline function set_radius(v) {
 		invalidateDebugBounds = true;
 		return radius = v;
@@ -58,25 +58,20 @@ class Entity {
 	public var frictY = 0.82;
 	public var bumpFrict = 0.93;
 
-	public var dir(default, set) = 1;
-	inline function set_dir(v) {
-		return dir = v > 0 ? 1 : v < 0 ? -1 : dir;
-	}
-
 	public var footX(get, never) : Float;
-	inline function get_footX() return (cx + xr) * Const.GRID;
+	inline function get_footX() return centerX;
 	public var footY(get, never) : Float;
-	inline function get_footY() return (cy + yr) * Const.GRID;
+	inline function get_footY() return centerY + 0.5 * hei;
 	public var headX(get, never) : Float;
 	inline function get_headX() return footX;
 	public var headY(get, never) : Float;
 	inline function get_headY() return footY - hei;
 	public var centerX(get, never) : Float;
-	inline function get_centerX() return footX;
+	inline function get_centerX() return (cx + xr) * game.level.gridSize;
 	public var centerY(get, never) : Float;
-	inline function get_centerY() return footY - hei * 0.5;
-	public var prevFrameFootX : Float = -Const.INFINITE;
-	public var prevFrameFootY : Float = -Const.INFINITE;
+	inline function get_centerY() return (cy + yr) * game.level.gridSize;
+	public var prevFrameCXR : Float = -Const.INFINITE;
+	public var prevFrameCYR : Float = -Const.INFINITE;
 
 	// Display
 	public var spr : HSprite;
@@ -96,7 +91,7 @@ class Entity {
 	var debugBounds : Null<h2d.Graphics>;
 	var invalidateDebugBounds = false;
 
-	public function new(?x : Int, ?y : Int) {
+	public function new(?sprLib:SpriteLib, ?x : Int, ?y : Int) {
 		uid = Const.NEXT_UNIQ;
 		ALL.push(this);
 
@@ -106,13 +101,13 @@ class Entity {
 		if (x != null && y != null)
 			setPosCell(x, y);
 
-		spr = new HSprite(Assets.tiles);
-		Game.ME.scroller.add(spr, Const.DP_MAIN);
+		spr = new HSprite(sprLib);
+		game.level.root.add(spr, Const.GAME_LEVEL_ENTITIES);
 		spr.colorAdd = new h3d.Vector();
 		baseColor = new h3d.Vector();
 		blinkColor = new h3d.Vector();
 		spr.colorMatrix = colorMatrix = h3d.Matrix.I();
-		spr.setCenterRatio(0.5, 1);
+		spr.setCenterRatio(0.5, 0.5);
 
 		if (ui.Console.ME.hasFlag("bounds"))
 			enableBounds();
@@ -122,32 +117,22 @@ class Entity {
 		cx = x;
 		cy = y;
 		xr = 0.5;
-		yr = 1;
+		yr = 0.5;
 		onPosManuallyChanged();
 	}
 
 	public function setPosPixel(x : Float, y : Float) {
-		cx = Std.int(x / Const.GRID);
-		cy = Std.int(y / Const.GRID);
-		xr = (x - cx * Const.GRID) / Const.GRID;
-		yr = (y - cy * Const.GRID) / Const.GRID;
+		cx = Std.int(x / game.level.gridSize);
+		cy = Std.int(y / game.level.gridSize);
+		xr = (x - cx * game.level.gridSize) / game.level.gridSize;
+		yr = (y - cy * game.level.gridSize) / game.level.gridSize;
 		onPosManuallyChanged();
 	}
-
-	#if heapsOgmo
-	public function setPosUsingOgmoEnt(oe : ogmo.Entity) {
-		cx = Std.int(oe.x / Const.GRID);
-		cy = Std.int(oe.y / Const.GRID);
-		xr = (oe.x - cx * Const.GRID) / Const.GRID;
-		yr = (oe.y - cy * Const.GRID) / Const.GRID;
-		onPosManuallyChanged();
-	}
-	#end
 
 	function onPosManuallyChanged() {
-		if (M.dist(footX, footY, prevFrameFootX, prevFrameFootY) > Const.GRID * 2) {
-			prevFrameFootX = footX;
-			prevFrameFootY = footY;
+		if (M.dist(cx + xr, cy + yr, prevFrameCXR, prevFrameCYR) > 2.) {
+			prevFrameCXR = cx + xr;
+			prevFrameCYR = cy + yr;
 		}
 	}
 
@@ -161,13 +146,11 @@ class Entity {
 		dy = bdy = 0;
 	}
 
-	public function is<T : Entity>(c : Class<T>) return Std.is(this, c);
+	public function is<T : Entity>(c : Class<T>) return Std.isOfType(this, c);
 
 	public function as<T : Entity>(c : Class<T>) : T return Std.downcast(this, c);
 
 	public inline function dirTo(e : Entity) return e.centerX < centerX ? -1 : 1;
-
-	public inline function dirToAng() return dir == 1 ? 0. : M.PI;
 
 	public inline function getMoveAng() return Math.atan2(dyTotal, dxTotal);
 
@@ -221,8 +204,10 @@ class Entity {
 			debugLabel = null;
 		}
 		if (v != null) {
-			if (debugLabel == null)
-				debugLabel = new h2d.Text(Assets.fontTiny, Game.ME.scroller);
+			if (debugLabel == null) {
+				debugLabel = new h2d.Text(Assets.fontTiny);
+				game.level.root.add(debugLabel, Const.GAME_LEVEL_TOP);
+			}
 			debugLabel.text = Std.string(v);
 			debugLabel.textColor = c;
 		}
@@ -239,7 +224,7 @@ class Entity {
 	public function enableBounds() {
 		if (debugBounds == null) {
 			debugBounds = new h2d.Graphics();
-			game.scroller.add(debugBounds, Const.DP_TOP);
+			game.level.root.add(debugBounds, Const.GAME_LEVEL_TOP);
 		}
 		invalidateDebugBounds = true;
 	}
@@ -258,7 +243,7 @@ class Entity {
 
 		// Feet
 		debugBounds.lineStyle(1, 0xffffff, 1);
-		var d = Const.GRID * 0.2;
+		var d = game.level.gridSize * 0.2;
 		debugBounds.moveTo(-d, 0);
 		debugBounds.lineTo(d, 0);
 		debugBounds.moveTo(0, -d);
@@ -343,9 +328,9 @@ class Entity {
 	}
 
 	public function postUpdate() {
-		spr.x = (cx + xr) * Const.GRID;
-		spr.y = (cy + yr) * Const.GRID;
-		spr.scaleX = dir * sprScaleX * sprSquashX;
+		spr.x = (cx + xr) * game.level.gridSize;
+		spr.y = (cy + yr) * game.level.gridSize;
+		spr.scaleX = sprScaleX * sprSquashX;
 		spr.scaleY = sprScaleY * sprSquashY;
 		spr.visible = visible;
 
@@ -383,8 +368,8 @@ class Entity {
 	}
 
 	public function finalUpdate() {
-		prevFrameFootX = footX;
-		prevFrameFootY = footY;
+		prevFrameCXR = cx + xr;
+		prevFrameCYR = cy + yr;
 	}
 
 	public function fixedUpdate() {}

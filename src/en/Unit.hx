@@ -6,10 +6,6 @@ class Unit extends Entity {
 	public var maxLife(default, null) : Int;
 	public var life(default, set) : Int;
 	public function set_life(v : Int) {
-		if (v < life) {
-			hit(life - v, null);
-			return life;
-		}
 		final maxHP = maxLife;
 		if (v > maxHP)
 			return life = Std.int(maxHP);
@@ -17,15 +13,9 @@ class Unit extends Entity {
 	}
 
 	public var lastDmgSource(default, null) : Null<Entity> = null;
-	public var lastHitDirFromSource(get, never) : Int;
-	inline function get_lastHitDirFromSource()
-		return lastDmgSource == null ? -dir : -dirTo(lastDmgSource);
-	public var lastHitDirToSource(get, never) : Int;
-	inline function get_lastHitDirToSource()
-		return lastDmgSource == null ? dir : dirTo(lastDmgSource);
 
 	public function new(id : String) {
-		super();
+		super(Assets.entities);
 		this.id = id;
 
 		reset();

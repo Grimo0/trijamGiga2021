@@ -11,6 +11,10 @@ class Camera extends dn.Process {
 	public var hei(get, never) : Int;
 	function get_hei() return M.ceil(Game.ME.h() / Const.SCALE);
 
+	public var frict = 0.89;
+	public var targetS = 0.006;
+	public var targetDeadZone = 5;
+
 	var bumpOffX = 0.;
 	var bumpOffY = 0.;
 
@@ -34,8 +38,8 @@ class Camera extends dn.Process {
 
 	public function recenter() {
 		if (target != null) {
-			x = target.centerX;
-			y = target.centerY;
+			x = target.headX;
+			y = target.headY;
 		}
 	}
 
@@ -55,20 +59,17 @@ class Camera extends dn.Process {
 
 		// Follow target entity
 		if (target != null) {
-			var s = 0.006;
-			var deadZone = 5;
-			var tx = target.footX;
-			var ty = target.footY;
+			var tx = target.headX;
+			var ty = target.headY;
 
 			var d = M.dist(x, y, tx, ty);
-			if (d >= deadZone) {
+			if (d >= targetDeadZone) {
 				var a = Math.atan2(ty - y, tx - x);
-				dx += Math.cos(a) * (d - deadZone) * s * tmod;
-				dy += Math.sin(a) * (d - deadZone) * s * tmod;
+				dx += Math.cos(a) * (d - targetDeadZone) * targetS * tmod;
+				dy += Math.sin(a) * (d - targetDeadZone) * targetS * tmod;
 			}
 		}
 
-		var frict = 0.89;
 		x += dx * tmod;
 		dx *= Math.pow(frict, tmod);
 
@@ -94,24 +95,18 @@ class Camera extends dn.Process {
 			var scroller = Game.ME.scroller;
 
 			// Update scroller
-			if (wid < level.wid * Const.GRID)
-				scroller.x = M.fclamp(-x + wid * 0.5, wid - level.wid * Const.GRID, 0);
+			if (wid < level.wid)
+				scroller.x = M.fclamp(-x + wid * 0.5, wid - level.wid, 0);
 			else if (level.wid != 0)
-				scroller.x = wid * 0.5 - level.wid * 0.5 * Const.GRID;
+				scroller.x = wid * 0.5 - level.wid * 0.5;
 			else
-				scroller.x = - level.wid * 0.5 * Const.GRID;
-			if (hei < level.hei * Const.GRID)
-				scroller.y = M.fclamp(-y + hei * 0.5, hei - level.hei * Const.GRID, 0);
+				scroller.x = - level.wid * 0.5;
+			if (hei < level.hei)
+				scroller.y = M.fclamp(-y + hei * 0.5, hei - level.hei, 0);
 			else if (level.hei != 0)
-				scroller.y = hei * 0.5 - level.hei * 0.5 * Const.GRID;
+				scroller.y = hei * 0.5 - level.hei * 0.5;
 			else
-				scroller.y = - level.hei * 0.5 * Const.GRID;
-
-			// Clamp
-			if (wid < level.wid * Const.GRID)
-				scroller.x = M.fclamp(scroller.x, wid - level.wid * Const.GRID, 0);
-			if (hei < level.hei * Const.GRID)
-				scroller.y = M.fclamp(scroller.y, hei - level.hei * Const.GRID, 0);
+				scroller.y = - level.hei * 0.5;
 
 			// Bumps friction
 			bumpOffX *= Math.pow(0.75, tmod);
