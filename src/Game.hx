@@ -5,11 +5,22 @@ import hxd.Key;
 class Game extends Process {
 	public static var ME : Game;
 
+	/** Game controller (pad or keyboard) **/
 	public var ca : dn.heaps.Controller.ControllerAccess;
+
+	/** Particles **/
 	public var fx : Fx;
+
+	/** Basic viewport control **/
 	public var camera : Camera;
+
+	/** Container of all visual game objects. Ths wrapper is moved around by Camera. **/
 	public var scroller : h2d.Layers;
+
+	/** Level data **/
 	public var level : Level;
+
+	/** UI **/
 	public var hud : ui.Hud;
 
 	public var curGameSpeed(default, null) = 1.0;
@@ -110,8 +121,10 @@ class Game extends Process {
 		}
 	}
 
+	/** CDB file changed on disk**/
 	public function onCdbReload() {}
 
+	/** Window/app resize event **/
 	override function onResize() {
 		super.onResize();
 		scroller.setScale(Const.SCALE);
@@ -126,6 +139,7 @@ class Game extends Process {
 		gc();
 	}
 
+	/** Garbage collect any Entity marked for destruction **/
 	function gc() {
 		if (Entity.GC == null || Entity.GC.length == 0)
 			return;
@@ -174,6 +188,7 @@ class Game extends Process {
 				e.preUpdate();
 	}
 
+	/** Main loop but limited to 30fps (so it might not be called during some frames) **/
 	override function fixedUpdate() {
 		super.fixedUpdate();
 
@@ -182,6 +197,7 @@ class Game extends Process {
 				e.fixedUpdate();
 	}
 
+	/** Main loop **/
 	override function update() {
 		super.update();
 
@@ -221,9 +237,8 @@ class Game extends Process {
 		var natArray = new hl.NativeArray<Single>(1);
 
 		natArray[0] = Const.MAX_CELLS_PER_WIDTH;
-		if (ImGui.sliderFloat('Const.MAX_CELLS_PER_WIDTH', natArray, 0, 100, '%.0f')) {
+		if (ImGui.sliderFloat('Const.MAX_CELLS_PER_WIDTH', natArray, -1, 100, '%.0f')) {
 			Const.MAX_CELLS_PER_WIDTH = Std.int(natArray[0]);
-			Const.SCALE = w() / (Const.MAX_CELLS_PER_WIDTH * level.gridSize);
 			scroller.setScale(Const.SCALE);
 		}
 

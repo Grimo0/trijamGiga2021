@@ -4,7 +4,10 @@ import hxd.Key;
 class Main extends dn.Process {
 	public static var ME : Main;
 
+	/** Used to create "Access" instances that allow controller checks (keyboard or gamepad) **/
 	public var controller : dn.heaps.Controller;
+
+	/** Controller Access created for Main & Boot **/
 	public var ca : dn.heaps.Controller.ControllerAccess;
 
 	public var debug = false;
@@ -25,11 +28,12 @@ class Main extends dn.Process {
 		sys.FileSystem.createDirectory('save');
 
 		// Assets & data init
+		hxd.snd.Manager.get(); // force sound manager init on startup instead of first sound play
 		Assets.init();
 		new ui.Console(Assets.fontTiny, s);
 		Lang.init("en");
 
-		// Game controller
+		// Game controller & default key bindings
 		controller = new dn.heaps.Controller(s);
 		ca = controller.createAccess("main");
 		controller.bind(AXIS_LEFT_X_NEG, Key.LEFT, Key.Q, Key.A);
@@ -50,6 +54,7 @@ class Main extends dn.Process {
 		Options.ME.load();
 
 		// Start
+		hxd.Timer.skip();
 		delayer.addF(startMainMenu, 1);
 		#if debug
 		debug = true;
@@ -68,6 +73,7 @@ class Main extends dn.Process {
 			new MainMenu();
 	}
 
+	/** Start game process **/
 	public function startGame() {
 		if (Game.ME != null) {
 			Game.ME.destroy();
@@ -76,19 +82,6 @@ class Main extends dn.Process {
 			}, 1);
 		} else
 			new Game();
-	}
-
-	override public function onResize() {
-		super.onResize();
-
-		// Auto scaling
-		if (Const.AUTO_SCALE_TARGET_WID > 0)
-			Const.SCALE = M.ceil(w() / Const.AUTO_SCALE_TARGET_WID);
-		else if (Const.AUTO_SCALE_TARGET_HEI > 0)
-			Const.SCALE = M.ceil(h() / Const.AUTO_SCALE_TARGET_HEI);
-
-		if (Const.AUTO_SCALE_UI_TARGET_HEI > 0)
-			Const.UI_SCALE = Math.max(1., h() / Const.AUTO_SCALE_UI_TARGET_HEI);
 	}
 
 	override function update() {

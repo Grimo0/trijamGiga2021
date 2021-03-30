@@ -4,8 +4,8 @@
 	"skipErrorMessage": true,
 	"commands": [
 		{
-			"text": "🍊 Build",
-			"color": "yellow",
+			"text": "🍊 HL",
+			"color": "orange",
 			"commandType":"palette",
 			"command": "workbench.action.tasks.runTask|HL release",
 			"alignment": "right",
@@ -14,17 +14,17 @@
 		},
 		{
 			"text": "Run",
-			"color": "yellow",
+			"color": "orange",
 			"command": "hl bin/client.hl",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -11
 		},
 		{
-			"text": "🍪 Build JS",
+			"text": "🍪 JS",
 			"color": "yellow",
-			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|JS release",
+			"commandType":"exec",
+			"command": "haxe js.hxml",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -12

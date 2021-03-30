@@ -1,12 +1,11 @@
 class Level extends dn.Process {
-	public var game(get, never) : Game;
-	inline function get_game() return Game.ME;
-	public var fx(get, never) : Fx;
-	inline function get_fx() return game.fx;
+	var game(get, never) : Game; inline function get_game() return Game.ME;
+	var fx(get, never) : Fx; inline function get_fx() return game.fx;
 
 	public var currLevel(default, set) : LDtkMap.LDtkMap_Level;
 	public function set_currLevel(l : LDtkMap.LDtkMap_Level) {
 		currLevel = l;
+		Const.GRID = gridSize;
 		initLevel();
 		return currLevel;
 	}
@@ -14,22 +13,19 @@ class Level extends dn.Process {
 	public var gridSize(get, never) : Int;
 	inline function get_gridSize() return currLevel.l_Floor.gridSize;
 
-	public var wid(get, never) : Int;
-	inline function get_wid() return currLevel.pxWid;
-
-	public var hei(get, never) : Int;
-	inline function get_hei() return currLevel.pxHei;
+	public var cWid(get,never) : Int; inline function get_cWid() return currLevel.l_Floor.cWid;
+	public var cHei(get,never) : Int; inline function get_cHei() return currLevel.l_Floor.cHei;
+	public var pxWid(get, never) : Int; inline function get_pxWid() return currLevel.pxWid;
+	public var pxHei(get, never) : Int; inline function get_pxHei() return currLevel.pxHei;
 
 	public function new() {
 		super(game);
 		createRootInLayers(game.scroller, Const.GAME_SCROLLER_LEVEL);
 	}
 
-	public inline function isValid(cx, cy)
-		return cx >= 0 && cx < wid && cy >= 0 && cy < hei;
+	public inline function isValid(cx, cy) return cx >= 0 && cx < cWid && cy >= 0 && cy < cHei;
 
-	public inline function coordId(cx, cy)
-		return cx + cy * wid;
+	public inline function coordId(cx, cy) return cx + cy * cWid;
 
 	public inline function hasCollision(cx, cy) : Bool
 		return false; // TODO: collision with entities and obstacles
@@ -76,18 +72,12 @@ class Level extends dn.Process {
 			pEnt.spr.tile.scaleToSize(p.width, p.height);
 			pEnt.setPosCell(p.cx, p.cy);
 		};
-
-		// Update camera zoom
-		Const.SCALE = w() / (Const.MAX_CELLS_PER_WIDTH * gridSize);
 	}
 
 	override function onResize() {
 		if (currLevel == null)
 			return;
 		super.onResize();
-
-		// Update camera zoom
-		Const.SCALE = w() / (Const.MAX_CELLS_PER_WIDTH * gridSize);
 	}
 
 	public function render() {}

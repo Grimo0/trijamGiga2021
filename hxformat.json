@@ -3,8 +3,11 @@
 		"classEmptyLines": {
 			"existingBetweenFields": "keep",
 			"afterVars": 0,
+			"afterPrivateVars": 0,
 			"afterStaticVars": 2
 		},
+		"afterFieldsWithDocComments": "ignore",
+		"beforeDocCommentEmptyLines": "ignore",
 		"maxAnywhereInFile": 4
 	},
 	"sameLine": {

@@ -2,10 +2,23 @@
 import imgui.ImGuiDrawable;
 #end
 
+/**
+	This class is the entry point for the app.
+	It doesn't do much, except creating Main and taking care of app speed ()
+**/
 class Boot extends hxd.App {
 	public static var ME : Boot;
 
-	// Boot
+	#if debug
+	var tmodSpeedMul = 1.0;
+	var ca(get,never) : dn.heaps.Controller.ControllerAccess;
+		inline function get_ca() return Main.ME.ca;
+	#end
+
+
+	/**
+		App entry point
+	**/
 	static function main() {
 		new Boot();
 	}
@@ -16,7 +29,9 @@ class Boot extends hxd.App {
 	var imguiDrawable : ImGuiDrawable;
 	#end
 
-	// Engine ready
+	/**
+		Called when engine is ready, actual app can start
+	**/
 	override function init() {
 		ME = this;
 		new Main(s2d);
@@ -34,12 +49,15 @@ class Boot extends hxd.App {
 		onResize();
 	}
 
+
 	override function onResize() {
 		super.onResize();
 
 		#if debug
 		ImGui.setDisplaySize(s2d.width, s2d.height);
 		#end
+
+		Const.update_SCALE();
 
 		dn.Process.resizeAll();
 	}
@@ -59,8 +77,8 @@ class Boot extends hxd.App {
 		}
 		#end
 
-		var tmod = hxd.Timer.tmod * speed;
 		dn.heaps.Controller.beforeUpdate();
+		var tmod = hxd.Timer.tmod * speed;
 		dn.Process.updateAll(tmod);
 
 		#if debug

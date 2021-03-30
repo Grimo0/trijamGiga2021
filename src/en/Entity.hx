@@ -33,18 +33,26 @@ class Entity {
 	public var cy = 0;
 	public var xr = 0.5;
 	public var yr = 0.5;
-	public var hei(default, set) : Float = game.level.gridSize;
+	public var hei(default, set) : Float = Const.GRID;
 	inline function set_hei(v) {
 		invalidateDebugBounds = true;
 		return hei = v;
 	}
-	public var radius(default, set) = game.level.gridSize * 0.5;
-	inline function set_radius(v) {
+	public var wid(default, set) : Float = Const.GRID;
+	inline function set_wid(v) {
 		invalidateDebugBounds = true;
-		return radius = v;
+		return wid = v;
 	}
 
-	// Movements
+	/** Inner radius in pixels (ie. smallest value between width/height, then divided by 2) **/
+	public var innerRadius(get, never) : Float;
+	inline function get_innerRadius() return M.fmin(wid, hei) * 0.5;
+
+	/** "Large" radius in pixels (ie. biggest value between width/height, then divided by 2) **/
+	public var largeRadius(get, never) : Float;
+	inline function get_largeRadius() return M.fmax(wid, hei) * 0.5;
+
+	// Velocities
 	public var dx = 0.;
 	public var dy = 0.;
 	public var bdx = 0.;
@@ -58,21 +66,6 @@ class Entity {
 	public var frictY = 0.82;
 	public var bumpFrict = 0.93;
 
-	public var footX(get, never) : Float;
-	inline function get_footX() return centerX;
-	public var footY(get, never) : Float;
-	inline function get_footY() return centerY + 0.5 * hei;
-	public var headX(get, never) : Float;
-	inline function get_headX() return footX;
-	public var headY(get, never) : Float;
-	inline function get_headY() return footY - hei;
-	public var centerX(get, never) : Float;
-	inline function get_centerX() return (cx + xr) * game.level.gridSize;
-	public var centerY(get, never) : Float;
-	inline function get_centerY() return (cy + yr) * game.level.gridSize;
-	public var prevFrameCXR : Float = -Const.INFINITE;
-	public var prevFrameCYR : Float = -Const.INFINITE;
-
 	// Display
 	public var spr : HSprite;
 	public var baseColor : h3d.Vector;
@@ -80,9 +73,28 @@ class Entity {
 	public var colorMatrix : h3d.Matrix;
 	public var sprScaleX = 1.0;
 	public var sprScaleY = 1.0;
-	public var sprSquashX = 1.0;
-	public var sprSquashY = 1.0;
+	public var sprSquashX = 1.0; // Sprite X squash & stretch scaling, which automatically comes back to 1 after a few frames
+	public var sprSquashY = 1.0; // Sprite Y squash & stretch scaling, which automatically comes back to 1 after a few frames
+
 	public var visible = true;
+
+	public var pivotX(default, set) : Float = 0.5; // Defines X alignment of entity at its attach point (0 to 1.0)
+	public var pivotY(default, set) : Float = 0.5; // Defines Y alignment of entity at its attach point (0 to 1.0)
+
+	/** Entity attach X pixel coordinate **/
+	public var attachX(get, never) : Float; inline function get_attachX() return (cx + xr) * Const.GRID;
+	/** Entity attach Y pixel coordinate **/
+	public var attachY(get, never) : Float; inline function get_attachY() return (cy + yr) * Const.GRID;
+
+	// Coordinates getters, for easier gameplay coding
+	public var left(get, never) : Float; inline function get_left() return attachX + (0 - pivotX) * wid;
+	public var right(get, never) : Float; inline function get_right() return attachX + (1 - pivotX) * wid;
+	public var top(get, never) : Float; inline function get_top() return attachY + (0 - pivotY) * hei;
+	public var bottom(get, never) : Float; inline function get_bottom() return attachY + (1 - pivotY) * hei;
+	public var centerX(get, never) : Float; inline function get_centerX() return attachX + (0.5 - pivotX) * wid;
+	public var centerY(get, never) : Float; inline function get_centerY() return attachY + (0.5 - pivotY) * hei;
+	public var prevFrameattachX : Float = -Const.INFINITE;
+	public var prevFrameattachY : Float = -Const.INFINITE;
 
 	var actions : Array<{id : String, cb : Void->Void, t : Float}> = [];
 
@@ -91,7 +103,7 @@ class Entity {
 	var debugBounds : Null<h2d.Graphics>;
 	var invalidateDebugBounds = false;
 
-	public function new(?sprLib:SpriteLib, ?x : Int, ?y : Int) {
+	public function new(?sprLib : SpriteLib, ?x : Int, ?y : Int) {
 		uid = Const.NEXT_UNIQ;
 		ALL.push(this);
 
@@ -107,10 +119,34 @@ class Entity {
 		baseColor = new h3d.Vector();
 		blinkColor = new h3d.Vector();
 		spr.colorMatrix = colorMatrix = h3d.Matrix.I();
-		spr.setCenterRatio(0.5, 0.5);
+		spr.setCenterRatio(pivotX, pivotY);
 
 		if (ui.Console.ME.hasFlag("bounds"))
 			enableBounds();
+	}
+
+	function set_pivotX(v) {
+		pivotX = M.fclamp(v, 0, 1);
+		if (spr != null)
+			spr.setCenterRatio(pivotX, pivotY);
+		return pivotX;
+	}
+
+	function set_pivotY(v) {
+		pivotY = M.fclamp(v, 0, 1);
+		if (spr != null)
+			spr.setCenterRatio(pivotX, pivotY);
+		return pivotY;
+	}
+
+	/** Quickly set X/Y pivots. If Y is omitted, it will be equal to X. **/
+	public function setPivots(x : Float, ?y : Float) {
+		pivotX = x;
+		pivotY = y != null ? y : x;
+	}
+
+	public inline function isAlive() {
+		return !destroyed;
 	}
 
 	public function setPosCell(x : Int, y : Int) {
@@ -122,17 +158,17 @@ class Entity {
 	}
 
 	public function setPosPixel(x : Float, y : Float) {
-		cx = Std.int(x / game.level.gridSize);
-		cy = Std.int(y / game.level.gridSize);
-		xr = (x - cx * game.level.gridSize) / game.level.gridSize;
-		yr = (y - cy * game.level.gridSize) / game.level.gridSize;
+		cx = Std.int(x / Const.GRID);
+		cy = Std.int(y / Const.GRID);
+		xr = (x - cx * Const.GRID) / Const.GRID;
+		yr = (y - cy * Const.GRID) / Const.GRID;
 		onPosManuallyChanged();
 	}
 
 	function onPosManuallyChanged() {
-		if (M.dist(cx + xr, cy + yr, prevFrameCXR, prevFrameCYR) > 2.) {
-			prevFrameCXR = cx + xr;
-			prevFrameCYR = cy + yr;
+		if (M.dist(attachX, attachY, prevFrameattachX, prevFrameattachY) > Const.GRID * 2) {
+			prevFrameattachX = attachX;
+			prevFrameattachY = attachY;
 		}
 	}
 
@@ -161,10 +197,10 @@ class Entity {
 		return M.dist(cx + xr, cy + yr, tcx + txr, tcy + tyr);
 
 	public inline function distPx(e : Entity)
-		return M.dist(footX, footY, e.footX, e.footY);
+		return M.dist(attachX, attachY, e.attachX, e.attachY);
 
 	public inline function distPxFree(x : Float, y : Float)
-		return M.dist(footX, footY, x, y);
+		return M.dist(attachX, attachY, x, y);
 
 	public inline function destroy() {
 		if (!destroyed) {
@@ -233,29 +269,19 @@ class Entity {
 		var c = Color.makeColorHsl((uid % 20) / 20, 1, 1);
 		debugBounds.clear();
 
-		// Radius
-		debugBounds.lineStyle(1, c, 0.8);
-		debugBounds.drawCircle(0, -radius, radius);
-
-		// Hei
+		// Bounds rect
 		debugBounds.lineStyle(1, c, 0.5);
-		debugBounds.drawRect(-radius, -hei, radius * 2, hei);
+		debugBounds.drawRect(left-attachX, top-attachY, wid, hei);
 
-		// Feet
-		debugBounds.lineStyle(1, 0xffffff, 1);
-		var d = game.level.gridSize * 0.2;
-		debugBounds.moveTo(-d, 0);
-		debugBounds.lineTo(d, 0);
-		debugBounds.moveTo(0, -d);
-		debugBounds.lineTo(0, 0);
+		// Attach point
+		debugBounds.lineStyle(0);
+		debugBounds.beginFill(c,0.8);
+		debugBounds.drawRect(-1, -1, 3, 3);
+		debugBounds.endFill();
 
 		// Center
 		debugBounds.lineStyle(1, c, 0.3);
-		debugBounds.drawCircle(0, -hei * 0.5, 3);
-
-		// Head
-		debugBounds.lineStyle(1, c, 0.3);
-		debugBounds.drawCircle(0, headY - footY, 3);
+		debugBounds.drawCircle(centerX-attachX, centerY-attachY, 3);
 	}
 
 	function chargeAction(id : String, sec : Float, cb : Void->Void) {
@@ -299,7 +325,7 @@ class Entity {
 			a.t -= tmod / Const.FPS;
 			if (a.t <= 0) {
 				actions.splice(i, 1);
-				if (!destroyed)
+				if (isAlive())
 					a.cb();
 			} else
 				i++;
@@ -328,8 +354,8 @@ class Entity {
 	}
 
 	public function postUpdate() {
-		spr.x = (cx + xr) * game.level.gridSize;
-		spr.y = (cy + yr) * game.level.gridSize;
+		spr.x = (cx + xr) * Const.GRID;
+		spr.y = (cy + yr) * Const.GRID;
 		spr.scaleX = sprScaleX * sprSquashX;
 		spr.scaleY = sprScaleY * sprSquashY;
 		spr.visible = visible;
@@ -352,8 +378,8 @@ class Entity {
 
 		// Debug label
 		if (debugLabel != null) {
-			debugLabel.x = Std.int(footX - debugLabel.textWidth * 0.5);
-			debugLabel.y = Std.int(footY + 1);
+			debugLabel.x = Std.int(attachX - debugLabel.textWidth * 0.5);
+			debugLabel.y = Std.int(attachY + 1);
 		}
 
 		// Debug bounds
@@ -361,15 +387,14 @@ class Entity {
 			if (invalidateDebugBounds) {
 				invalidateDebugBounds = false;
 				renderBounds();
-			}
-			debugBounds.x = footX;
-			debugBounds.y = footY;
+			}			debugBounds.x = Std.int(attachX);
+			debugBounds.y = Std.int(attachY);
 		}
 	}
 
 	public function finalUpdate() {
-		prevFrameCXR = cx + xr;
-		prevFrameCYR = cy + yr;
+		prevFrameattachX = attachX;
+		prevFrameattachY = attachY;
 	}
 
 	public function fixedUpdate() {}
@@ -395,10 +420,8 @@ class Entity {
 		}
 		dx *= Math.pow(frictX, tmod);
 		bdx *= Math.pow(bumpFrict, tmod);
-		if (M.fabs(dx) <= 0.0005 * tmod)
-			dx = 0;
-		if (M.fabs(bdx) <= 0.0005 * tmod)
-			bdx = 0;
+		if (M.fabs(dx) <= 0.0005 * tmod) dx = 0;
+		if (M.fabs(bdx) <= 0.0005 * tmod) bdx = 0;
 
 		// Y
 		var steps = M.ceil(M.fabs(dyTotal * tmod));
@@ -420,10 +443,8 @@ class Entity {
 		}
 		dy *= Math.pow(frictY, tmod);
 		bdy *= Math.pow(bumpFrict, tmod);
-		if (M.fabs(dy) <= 0.0005 * tmod)
-			dy = 0;
-		if (M.fabs(bdy) <= 0.0005 * tmod)
-			bdy = 0;
+		if (M.fabs(dy) <= 0.0005 * tmod) dy = 0;
+		if (M.fabs(bdy) <= 0.0005 * tmod) bdy = 0;
 
 		#if debug
 		if (ui.Console.ME.hasFlag("bounds") && debugBounds == null)
