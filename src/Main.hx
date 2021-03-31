@@ -75,6 +75,8 @@ class Main extends dn.Process {
 
 	/** Start game process **/
 	public function startGame() {
+		killAllChildrenProcesses();
+		
 		if (Game.ME != null) {
 			Game.ME.destroy();
 			delayer.addF(function() {
