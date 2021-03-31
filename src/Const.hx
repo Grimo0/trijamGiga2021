@@ -18,10 +18,10 @@ class Const {
 	static public function update_SCALE() {
 		if (MAX_CELLS_PER_WIDTH > 0)
 			SCALE = dn.heaps.Scaler.getViewportWidth() / (MAX_CELLS_PER_WIDTH * GRID);
-		else if (Const.SCALE_AUTO_CWID > 0)
-			Const.SCALE = M.ceil(dn.heaps.Scaler.getViewportWidth() / Const.SCALE_AUTO_CWID);
-		else if (Const.SCALE_AUTO_CHEI > 0)
-			Const.SCALE = M.ceil(dn.heaps.Scaler.getViewportHeight() / Const.SCALE_AUTO_CHEI);
+		else if (SCALE_AUTO_CWID > 0)
+			SCALE = M.ceil(dn.heaps.Scaler.getViewportWidth() / SCALE_AUTO_CWID);
+		else if (SCALE_AUTO_CHEI > 0)
+			SCALE = M.ceil(dn.heaps.Scaler.getViewportHeight() / SCALE_AUTO_CHEI);
 		// can be replaced with another way to determine the game scaling
 		SCALE = dn.heaps.Scaler.bestFit_i(1280, 720);
 	}
