@@ -271,17 +271,17 @@ class Entity {
 
 		// Bounds rect
 		debugBounds.lineStyle(1, c, 0.5);
-		debugBounds.drawRect(left-attachX, top-attachY, wid, hei);
+		debugBounds.drawRect(left - attachX, top - attachY, wid, hei);
 
 		// Attach point
 		debugBounds.lineStyle(0);
-		debugBounds.beginFill(c,0.8);
+		debugBounds.beginFill(c, 0.8);
 		debugBounds.drawRect(-1, -1, 3, 3);
 		debugBounds.endFill();
 
 		// Center
 		debugBounds.lineStyle(1, c, 0.3);
-		debugBounds.drawCircle(centerX-attachX, centerY-attachY, 3);
+		debugBounds.drawCircle(centerX - attachX, centerY - attachY, 3);
 	}
 
 	function chargeAction(id : String, sec : Float, cb : Void->Void) {
@@ -387,7 +387,8 @@ class Entity {
 			if (invalidateDebugBounds) {
 				invalidateDebugBounds = false;
 				renderBounds();
-			}			debugBounds.x = Std.int(attachX);
+			}
+			debugBounds.x = Std.int(attachX);
 			debugBounds.y = Std.int(attachY);
 		}
 	}

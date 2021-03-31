@@ -23,7 +23,7 @@ class MainMenu extends Process {
 		var bg = Assets.ui.getBitmap('menuBackground');
 		bg.setScale(1.04);
 		root.addChild(bg);
-		
+
 		// Background moving with mouse
 		var bgSize = bg.getSize();
 		root.getScene().addEventListener(e -> {
@@ -33,7 +33,7 @@ class MainMenu extends Process {
 		});
 
 		Process.resizeAll();
-		
+
 		delayer.addF(() -> {
 			hxd.Window.getInstance().event(new hxd.Event(hxd.Event.EventKind.EMove, root.getScene().mouseX, root.getScene().mouseY));
 		}, 1);

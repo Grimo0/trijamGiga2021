@@ -2,7 +2,7 @@ class Options {
 	public static var ME : Options;
 
 	public var speedMul = 1.;
-	
+
 	public function new() {
 		ME = this;
 	}
@@ -20,7 +20,7 @@ class Options {
 	#if debug
 	public function imGuiDebugFields() {
 		var natArray = new hl.NativeArray<Single>(1);
-		
+
 		natArray[0] = speedMul;
 		if (ImGui.sliderFloat('speedMul', natArray, 0, 10, '%.1f'))
 			speedMul = natArray[0];

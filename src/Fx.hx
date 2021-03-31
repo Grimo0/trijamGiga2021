@@ -5,9 +5,7 @@ import dn.Tweenie;
 
 class Fx extends dn.Process {
 	var game(get, never) : Game; inline function get_game() return Game.ME;
-
-	var level(get, never) : Level;
-	inline function get_level() return Game.ME.level;
+	var level(get, never) : Level; inline function get_level() return Game.ME.level;
 
 	public var pool : ParticlePool;
 
@@ -145,24 +143,22 @@ class Fx extends dn.Process {
 		});
 	}
 
-
 	/**
 		A small sample to demonstrate how basic particles work. This example produces a small explosion of yellow dots that will fall and slowly fade to purple.
 
 		USAGE: fx.dotsExplosionExample(50,50, 0xffcc00)
 	**/
-	public function dotsExplosionExample(x:Float, y:Float, color:UInt) {
-		for(i in 0...80) {
-			var p = allocTopAdd( getTile("fxDot"), x+rnd(0,3,true), y+rnd(0,3,true) );
-			p.alpha = rnd(0.4,1);
+	public function dotsExplosionExample(x : Float, y : Float, color : UInt) {
+		for (i in 0...80) {
+			var p = allocTopAdd(getTile("fxDot"), x + rnd(0, 3, true), y + rnd(0, 3, true));
+			p.alpha = rnd(0.4, 1);
 			p.colorAnimS(color, 0x762087, rnd(0.6, 3)); // fade particle color from parameter color to some purple
-			p.moveAwayFrom(x,y, rnd(1,3)); // move away from source
+			p.moveAwayFrom(x, y, rnd(1, 3)); // move away from source
 			p.frict = rnd(0.8, 0.9); // friction applied to velocities
 			p.gy = rnd(0, 0.02); // gravity Y (added on each frame)
-			p.lifeS = rnd(2,3); // life time in seconds
+			p.lifeS = rnd(2, 3); // life time in seconds
 		}
 	}
-
 
 	override function update() {
 		super.update();

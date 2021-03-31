@@ -8,11 +8,11 @@ class Camera extends dn.Process {
 
 	/** Width of viewport in level pixels **/
 	public var pxWid(get, never) : Int;
-	function get_pxWid() return M.ceil( Game.ME.w() / Const.SCALE );
+	function get_pxWid() return M.ceil(Game.ME.w() / Const.SCALE);
 
 	/** Height of viewport in level pixels **/
 	public var pxHei(get, never) : Int;
-	function get_pxHei() return M.ceil( Game.ME.h() / Const.SCALE );
+	function get_pxHei() return M.ceil(Game.ME.h() / Const.SCALE);
 
 	public var frict = 0.89;
 	public var bumpFrict = 0.75;
@@ -23,32 +23,31 @@ class Camera extends dn.Process {
 	var dy : Float;
 	var bumpOffX = 0.;
 	var bumpOffY = 0.;
-	
+
 	var shakePower = 1.0;
 
 	/** If TRUE (default), the camera will try to stay inside level bounds. It cannot be done if level is smaller than actual viewport. In such case, the camera will be centered. **/
 	public var clampToLevelBounds = true;
 
 	/** Left camera bound in level pixels **/
-	public var left(get,never) : Int;
-	inline function get_left() return M.imax( M.floor( focus.levelX-pxWid*0.5 ), clampToLevelBounds ? 0 : -Const.INFINITE );
+	public var left(get, never) : Int;
+	inline function get_left() return M.imax(M.floor(focus.levelX - pxWid * 0.5), clampToLevelBounds ? 0 : -Const.INFINITE);
 
 	/** Right camera bound in level pixels **/
-	public var right(get,never) : Int;
+	public var right(get, never) : Int;
 	inline function get_right() return left + pxWid - 1;
 
 	/** Upper camera bound in level pixels **/
-	public var top(get,never) : Int;
-	inline function get_top() return M.imax( M.floor( focus.levelY-pxHei*0.5 ), clampToLevelBounds ? 0 : -Const.INFINITE );
+	public var top(get, never) : Int;
+	inline function get_top() return M.imax(M.floor(focus.levelY - pxHei * 0.5), clampToLevelBounds ? 0 : -Const.INFINITE);
 
 	/** Lower camera bound in level pixels **/
-	public var bottom(get,never) : Int;
+	public var bottom(get, never) : Int;
 	inline function get_bottom() return top + pxHei - 1;
-
 
 	public function new() {
 		super(Game.ME);
-		focus = LPoint.fromCase(0,0);
+		focus = LPoint.fromCase(0, 0);
 		dx = dy = 0;
 		apply();
 	}
@@ -76,6 +75,7 @@ class Camera extends dn.Process {
 	}
 
 	public inline function scrollerToGlobalX(v : Float) return v * Const.SCALE + Game.ME.scroller.x;
+
 	public inline function scrollerToGlobalY(v : Float) return v * Const.SCALE + Game.ME.scroller.y;
 
 	public function shakeS(t : Float, ?pow = 1.0) {
@@ -84,15 +84,14 @@ class Camera extends dn.Process {
 	}
 
 	public inline function bumpAng(a, dist) {
-		bumpOffX+=Math.cos(a)*dist;
-		bumpOffY+=Math.sin(a)*dist;
+		bumpOffX += Math.cos(a) * dist;
+		bumpOffY += Math.sin(a) * dist;
 	}
 
-	public inline function bump(x,y) {
-		bumpOffX+=x;
-		bumpOffY+=y;
+	public inline function bump(x, y) {
+		bumpOffX += x;
+		bumpOffY += y;
 	}
-
 
 	/** Apply camera values to Game scroller **/
 	function apply() {
@@ -100,22 +99,22 @@ class Camera extends dn.Process {
 		var scroller = Game.ME.scroller;
 
 		// Update scroller
-		if( !clampToLevelBounds || pxWid<level.pxWid)
-			scroller.x = -focus.levelX + pxWid*0.5;
+		if (!clampToLevelBounds || pxWid < level.pxWid)
+			scroller.x = -focus.levelX + pxWid * 0.5;
 		else
-			scroller.x = pxWid*0.5 - level.pxWid*0.5;
+			scroller.x = pxWid * 0.5 - level.pxWid * 0.5;
 
-		if( !clampToLevelBounds || pxHei<level.pxHei)
-			scroller.y = -focus.levelY + pxHei*0.5;
+		if (!clampToLevelBounds || pxHei < level.pxHei)
+			scroller.y = -focus.levelY + pxHei * 0.5;
 		else
-			scroller.y = pxHei*0.5 - level.pxHei*0.5;
+			scroller.y = pxHei * 0.5 - level.pxHei * 0.5;
 
 		// Clamp
-		if( clampToLevelBounds ) {
-			if( pxWid<level.pxWid)
-				scroller.x = M.fclamp(scroller.x, pxWid-level.pxWid, 0);
-			if( pxHei<level.pxHei)
-				scroller.y = M.fclamp(scroller.y, pxHei-level.pxHei, 0);
+		if (clampToLevelBounds) {
+			if (pxWid < level.pxWid)
+				scroller.x = M.fclamp(scroller.x, pxWid - level.pxWid, 0);
+			if (pxHei < level.pxHei)
+				scroller.y = M.fclamp(scroller.y, pxHei - level.pxHei, 0);
 		}
 
 		// Bumps friction
@@ -127,9 +126,9 @@ class Camera extends dn.Process {
 		scroller.y += bumpOffY;
 
 		// Shakes
-		if( cd.has("shaking") ) {
-			scroller.x += Math.cos(ftime*1.1)*2.5*shakePower * cd.getRatio("shaking");
-			scroller.y += Math.sin(0.3+ftime*1.7)*2.5*shakePower * cd.getRatio("shaking");
+		if (cd.has("shaking")) {
+			scroller.x += Math.cos(ftime * 1.1) * 2.5 * shakePower * cd.getRatio("shaking");
+			scroller.y += Math.sin(0.3 + ftime * 1.7) * 2.5 * shakePower * cd.getRatio("shaking");
 		}
 
 		// Scaling
@@ -149,9 +148,9 @@ class Camera extends dn.Process {
 			var tx = target.centerX;
 			var ty = target.centerY;
 
-			var d = focus.distPx(tx,ty);
+			var d = focus.distPx(tx, ty);
 			if (d >= targetDeadZone) {
-				var a = focus.angTo(tx,ty);
+				var a = focus.angTo(tx, ty);
 				dx += Math.cos(a) * (d - targetDeadZone) * targetS * tmod;
 				dy += Math.sin(a) * (d - targetDeadZone) * targetS * tmod;
 			}
@@ -167,7 +166,7 @@ class Camera extends dn.Process {
 	override function postUpdate() {
 		super.postUpdate();
 
-		if( !ui.Console.ME.hasFlag("scroll") )
+		if (!ui.Console.ME.hasFlag("scroll"))
 			apply();
 	}
 }

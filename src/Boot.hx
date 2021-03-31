@@ -11,10 +11,9 @@ class Boot extends hxd.App {
 
 	#if debug
 	var tmodSpeedMul = 1.0;
-	var ca(get,never) : dn.heaps.Controller.ControllerAccess;
-		inline function get_ca() return Main.ME.ca;
+	var ca(get, never) : dn.heaps.Controller.ControllerAccess;
+	inline function get_ca() return Main.ME.ca;
 	#end
-
 
 	/**
 		App entry point
@@ -24,7 +23,7 @@ class Boot extends hxd.App {
 	}
 
 	var speed = 1.0;
-	
+
 	#if debug
 	var imguiDrawable : ImGuiDrawable;
 	#end
@@ -48,7 +47,6 @@ class Boot extends hxd.App {
 
 		onResize();
 	}
-
 
 	override function onResize() {
 		super.onResize();

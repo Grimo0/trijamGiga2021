@@ -3,16 +3,32 @@ class Const {
 	public static inline var FIXED_FPS = 30;
 	public static inline var INFINITE = 999999;
 	public static var SCALE_AUTO_CWID(default, set) = -1; // -1 to disable auto-scaling on width
-	static inline function set_SCALE_AUTO_CWID(s) { SCALE_AUTO_CWID = s; update_SCALE(); return SCALE_AUTO_CWID; }
+	static inline function set_SCALE_AUTO_CWID(s) {
+		SCALE_AUTO_CWID = s;
+		update_SCALE();
+		return SCALE_AUTO_CWID;
+	}
 	public static var SCALE_AUTO_CHEI(default, set) = -1; // -1 to disable auto-scaling on height
-	static inline function set_SCALE_AUTO_CHEI(s) { SCALE_AUTO_CHEI = s; update_SCALE(); return SCALE_AUTO_CHEI; }
+	static inline function set_SCALE_AUTO_CHEI(s) {
+		SCALE_AUTO_CHEI = s;
+		update_SCALE();
+		return SCALE_AUTO_CHEI;
+	}
 	public static var SCALE = 1.0; // ignored if auto-scaling
 	public static var UI_SCALE = 1.0; // ignored if auto-scaling
-	
+
 	public static var GRID(default, set) = 16.;
-	static inline function set_GRID(s) { GRID = s; update_SCALE(); return GRID; }
+	static inline function set_GRID(s) {
+		GRID = s;
+		update_SCALE();
+		return GRID;
+	}
 	public static var MAX_CELLS_PER_WIDTH(default, set) = 14;
-	static inline function set_MAX_CELLS_PER_WIDTH(s) { MAX_CELLS_PER_WIDTH = s; update_SCALE(); return MAX_CELLS_PER_WIDTH; }
+	static inline function set_MAX_CELLS_PER_WIDTH(s) {
+		MAX_CELLS_PER_WIDTH = s;
+		update_SCALE();
+		return MAX_CELLS_PER_WIDTH;
+	}
 
 	/** Viewport scaling **/
 	static public function update_SCALE() {

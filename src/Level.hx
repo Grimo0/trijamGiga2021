@@ -13,8 +13,8 @@ class Level extends dn.Process {
 	public var gridSize(get, never) : Int;
 	inline function get_gridSize() return currLevel.l_Floor.gridSize;
 
-	public var cWid(get,never) : Int; inline function get_cWid() return currLevel.l_Floor.cWid;
-	public var cHei(get,never) : Int; inline function get_cHei() return currLevel.l_Floor.cHei;
+	public var cWid(get, never) : Int; inline function get_cWid() return currLevel.l_Floor.cWid;
+	public var cHei(get, never) : Int; inline function get_cHei() return currLevel.l_Floor.cHei;
 	public var pxWid(get, never) : Int; inline function get_pxWid() return currLevel.pxWid;
 	public var pxHei(get, never) : Int; inline function get_pxHei() return currLevel.pxHei;
 
@@ -53,7 +53,7 @@ class Level extends dn.Process {
 		// Floor
 		root.add(currLevel.l_Floor.render(), Const.GAME_LEVEL_FLOOR);
 
-		// Player 
+		// Player
 		for (p in currLevel.l_Entities.getAllUntyped()) { // TODO: Change getAllUntyped for your alls
 			// Read h2d.Tile
 			var tileset = Assets.world.tilesets.get(p.defaultTileInfos.tilesetUid);
