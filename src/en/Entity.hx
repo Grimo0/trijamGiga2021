@@ -21,7 +21,7 @@ class Entity {
 	inline function get_hud() return Game.ME.hud;
 
 	// Main properties
-	public var uid : Int;
+	public var uid(default, null) : Int;
 
 	public var destroyed(default, null) = false;
 
