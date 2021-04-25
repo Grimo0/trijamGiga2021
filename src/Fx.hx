@@ -1,7 +1,5 @@
 import en.Entity;
-import h2d.Sprite;
 import dn.heaps.HParticle;
-import dn.Tweenie;
 
 class Fx extends dn.Process {
 	var game(get, never) : Game; inline function get_game() return Game.ME;
