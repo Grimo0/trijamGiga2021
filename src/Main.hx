@@ -103,6 +103,13 @@ class Main extends dn.Process {
 			hxd.Save.delete('save/game');
 			delayer.addF(startGame, 1);
 		}
+		ImGui.separator();
+		if (Options.ME != null && ImGui.treeNodeEx('Debug')) {
+			ImGui.text("Draw calls" + engine.drawCalls);
+			ImGui.text("Fps" + engine.fps);
+
+			ImGui.treePop();
+		}
 		if (Options.ME != null && ImGui.treeNodeEx('Options')) {
 			if (ImGui.button('Save', halfBtnSize))
 				Options.ME.save();
