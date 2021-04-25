@@ -74,9 +74,9 @@ class Camera extends dn.Process {
 		}
 	}
 
-	public inline function scrollerToGlobalX(v : Float) return v * Const.SCALE + Game.ME.scroller.x;
+	public inline function scrollerToGlobalX(v : Float) return v * Game.ME.scroller.scaleX + Game.ME.scroller.x;
 
-	public inline function scrollerToGlobalY(v : Float) return v * Const.SCALE + Game.ME.scroller.y;
+	public inline function scrollerToGlobalY(v : Float) return v * Game.ME.scroller.scaleY + Game.ME.scroller.y;
 
 	public function shakeS(t : Float, ?pow = 1.0) {
 		cd.setS("shaking", t, false);
