@@ -159,6 +159,18 @@
 				"$haxe-trace"
 			],
 			"detail": "Pack all textures in art into an atlas in res/atlas"
+		},
+		{
+			"label": "Git latest",
+			"type": "shell",
+			"command": "git log --pretty='format:%C(auto, green)%ad%C(auto) %s' --date='format:%b %d %H:%M' --since='2 days'",
+			"presentation": {
+				"reveal": "always",
+				"revealProblems": "onProblem",
+				"panel": "shared"
+			},
+			"detail": "Show the commits of the last days",
+			"problemMatcher": []
 		}
 	]
 }

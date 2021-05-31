@@ -23,8 +23,8 @@
 		{
 			"text": "🍪 JS",
 			"color": "yellow",
-			"commandType":"exec",
-			"command": "haxe js.hxml",
+			"commandType":"palette",
+			"command": "workbench.action.tasks.runTask|JS release",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -12
@@ -57,7 +57,7 @@
 		},
 		{
 			"text": "💬 Build POT",
-			"color": "yellow",
+			"color": "white",
 			"commandType":"palette",
 			"command": "workbench.action.tasks.runTask|Lang",
 			"alignment": "right",
@@ -79,6 +79,15 @@
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -51
+		},
+		{
+			"text": "👓",
+			"color": "white",
+			"commandType":"palette",
+			"command": "workbench.action.tasks.runTask|Git latest",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -60
 		}
 	]
 }
