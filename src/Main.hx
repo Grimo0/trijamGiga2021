@@ -99,14 +99,20 @@ class Main extends dn.Process {
 	#if debug
 	function updateImGui() {
 		var halfBtnSize : ImVec2 = {x: ImGui.getColumnWidth() / 2 - 5, y: ImGui.getTextLineHeightWithSpacing()};
+		final strongColor : ImVec4 = {x: .67, y: .78, z: 1., w: 1.};
+
 		if (ImGui.button('New game', halfBtnSize)) {
 			hxd.Save.delete('save/game');
 			delayer.addF(startGame, 1);
 		}
 		ImGui.separator();
 		if (Options.ME != null && ImGui.treeNodeEx('Debug')) {
-			ImGui.text("Draw calls" + engine.drawCalls);
-			ImGui.text("Fps" + engine.fps);
+			ImGui.text("Draw calls:");
+			ImGui.sameLine(0, 5);
+			ImGui.textColored(strongColor, Std.string(engine.drawCalls));
+			ImGui.text("Fps:");
+			ImGui.sameLine(0, 5);
+			ImGui.textColored(strongColor, Std.string(Std.int(engine.fps)));
 
 			ImGui.treePop();
 		}
