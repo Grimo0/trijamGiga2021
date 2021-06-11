@@ -20,7 +20,7 @@ class Main extends dn.Process {
 
 		// Engine settings
 		hxd.Timer.wantedFPS = Const.FPS;
-		engine.backgroundColor = 0xff << 24 | 0x111133;
+		engine.backgroundColor = 0xff << 24 | 0x000000;
 		#if (hl && !debug)
 		engine.fullScreen = true;
 		#end
@@ -50,12 +50,16 @@ class Main extends dn.Process {
 		// Focus helper (process that suspend the game when the focus is lost)
 		new GameFocusHelper();
 
+		// Options loading
 		new Options();
 		Options.ME.load();
+
+		Game.load();
 
 		// Start
 		hxd.Timer.skip();
 		delayer.addF(startMainMenu, 1);
+
 		#if debug
 		debug = true;
 		#end
@@ -98,11 +102,13 @@ class Main extends dn.Process {
 
 	#if debug
 	function updateImGui() {
-		var halfBtnSize : ImVec2 = {x: ImGui.getColumnWidth() / 2 - 5, y: ImGui.getTextLineHeightWithSpacing()};
+		final halfBtnSize : ImVec2 = {x: ImGui.getColumnWidth() / 2 - 5, y: ImGui.getTextLineHeightWithSpacing()};
+		final tierBtnSize : ImVec2 = {x: ImGui.getColumnWidth() / 3 - 5, y: ImGui.getTextLineHeightWithSpacing()};
 		final strongColor : ImVec4 = {x: .67, y: .78, z: 1., w: 1.};
 
 		if (ImGui.button('New game', halfBtnSize)) {
 			hxd.Save.delete('save/game');
+			Game.sav = new GameSave();
 			delayer.addF(startGame, 1);
 		}
 		ImGui.separator();
@@ -122,6 +128,16 @@ class Main extends dn.Process {
 			ImGui.sameLine(0, 5);
 			if (ImGui.button('Load', halfBtnSize))
 				Options.ME.load();
+			
+			ImGui.text("Interactive:");
+			ImGui.sameLine(0, 2);
+			if (ImGui.button('RenderBounds', tierBtnSize)) {
+				Interactive.renderDebugBounds();
+			}
+			ImGui.sameLine(0, 2);
+			if (ImGui.button('ClearBounds', tierBtnSize)) {
+				Interactive.clearDebugBounds();
+			}
 
 			Options.ME.imGuiDebugFields();
 

@@ -5,6 +5,8 @@ import hxd.Key;
 class Game extends Process {
 	public static var ME : Game;
 
+	public static var sav : GameSave = new GameSave();
+
 	/** Game controller (pad or keyboard) **/
 	public var ca : dn.heaps.Controller.ControllerAccess;
 
@@ -23,15 +25,17 @@ class Game extends Process {
 	/** UI **/
 	public var hud : ui.Hud;
 
-	public var curGameSpeed(default, null) = 1.0;
-
-	var slowMos : Map<String, {id : String, t : Float, f : Float}> = new Map();
-
 	public var locked = false;
-
 	public var started(default, null) = false;
+	
+	public var pxWid(get, never) : Int;
+	function get_pxWid() return M.ceil(w() / Const.SCALE);
 
-	var sav : GameSave = new GameSave();
+	public var pxHei(get, never) : Int;
+	function get_pxHei() return M.ceil(h() / Const.SCALE);
+
+	public var curGameSpeed(default, null) = 1.0;
+	var slowMos : Map<String, {id : String, t : Float, f : Float}> = new Map();
 
 	var flags : Map<String, Int> = new Map();
 
@@ -39,6 +43,7 @@ class Game extends Process {
 		super(Main.ME);
 		ME = this;
 
+		flags = sav.flags.copy();
 		ca = Main.ME.controller.createAccess("game");
 		ca.setLeftDeadZone(0.2);
 		ca.setRightDeadZone(0.2);
@@ -62,10 +67,8 @@ class Game extends Process {
 		tw.createS(root.alpha, 1, #if debug 0 #else 1 #end);
 	}
 
-	public function load() {
+	public static function load() {
 		sav = hxd.Save.load(sav, 'save/game');
-
-		flags = sav.flags.copy();
 	}
 
 	public function save() {
@@ -107,11 +110,11 @@ class Game extends Process {
 
 				Main.ME.startMainMenu();
 			} else {
-				startLevel(levelUID);
-
 				var level = Assets.world.getLevel(levelUID);
 				flags.set(level.identifier, 1);
 				save();
+
+				startLevel(levelUID);
 
 				Main.ME.tw.createS(root.alpha, 1, #if debug 0 #else 1 #end);
 			}
@@ -220,7 +223,7 @@ class Game extends Process {
 		if (!ui.Console.ME.isActive() && !ui.Modal.hasAny()) {
 			#if hl
 			// Exit
-			if (ca.isKeyboardPressed(Key.ESCAPE)) {
+			if (ca.isPressed(START)) {
 				if (cd.hasSetS("exitWarn", 3))
 					return Main.ME.startMainMenu();
 			}
@@ -247,6 +250,27 @@ class Game extends Process {
 			(i : Int) -> Assets.world.levels[i].identifier,
 			(i : Int) -> transition(Assets.world.levels[i].uid));
 		ImGui.separator();
+
+		ImGui.alignTextToFramePadding();
+		ImGui.text('Scroller');
+		ImGui.sameLine(0, 5);
+		ImGui.pushItemWidth(ImGui.getColumnWidth() / 4);
+		natArray[0] = scroller.x;
+		if (ImGui.sliderFloat('##x', natArray, 0, pxWid, 'x %.0f'))
+			scroller.x = natArray[0];
+		ImGui.sameLine(0, 2);
+		natArray[0] = scroller.y;
+		if (ImGui.sliderFloat('##y', natArray, 0, pxHei, 'y %.0f'))
+			scroller.y = natArray[0];
+		ImGui.sameLine(0, 2);
+		natArray[0] = scroller.scaleX;
+		if (ImGui.sliderFloat('##scalex', natArray, 0, 2, 'sX %.2f'))
+			scroller.scaleX = natArray[0];
+		ImGui.sameLine(0, 2);
+		natArray[0] = scroller.scaleY;
+		if (ImGui.sliderFloat('##scaley', natArray, 0, 2, 'sY %.2f'))
+			scroller.scaleY = natArray[0];
+		ImGui.popItemWidth();
 	}
 	#end
 
