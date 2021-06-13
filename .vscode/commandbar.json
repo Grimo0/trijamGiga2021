@@ -67,6 +67,7 @@
 		{
 			"text": "📦 Redist",
 			"color": "lightgreen",
+			"commandType":"palette",
 			"command": "workbench.action.tasks.runTask|HL redist",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
@@ -75,6 +76,7 @@
 		{
 			"text": "📦 Redist JS",
 			"color": "lightgreen",
+			"commandType":"palette",
 			"command": "workbench.action.tasks.runTask|JS redist",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
