@@ -38,7 +38,7 @@
 				"$haxe-error",
 				"$haxe-trace"
 			],
-			"group": "build",
+			"group": "build"
 		},
 		{
 			"label": "HL redist",
@@ -54,10 +54,9 @@
 				"$haxe-trace"
 			],
 			"group": "build",
-			"command": "haxelib run redistHelper hl.dx.hxml hl.sdl.hxml -p ajisai",
+			"command": "haxelib run redistHelper hl.dx.hxml hl.sdl.hxml -p _GAME_NAME_",
 			"detail": "Create a package in the redist folder."
 		},
-
 		{
 			"label": "JS debug",
 			"type": "hxml",
@@ -70,7 +69,7 @@
 			"problemMatcher": [
 				"$haxe"
 			],
-			"group": "build",
+			"group": "build"
 		},
 		{
 			"label": "JS release",
@@ -87,7 +86,7 @@
 				"$haxe-error",
 				"$haxe-trace"
 			],
-			"group": "build",
+			"group": "build"
 		},
 		{
 			"label": "JS redist",
@@ -103,10 +102,9 @@
 				"$haxe-trace"
 			],
 			"group": "build",
-			"command": "haxelib run redistHelper js.hxml -zip -p ajisai",
+			"command": "haxelib run redistHelper js.hxml -zip -p _GAME_NAME_",
 			"detail": "Create a package in the redist folder."
 		},
-
 		{
 			"label": "Lang",
 			"type": "hxml",
@@ -121,7 +119,7 @@
 				"$haxe",
 				"$haxe-error",
 				"$haxe-trace"
-			],
+			]
 		},
 		{
 			"label": "Src Formatter",
@@ -145,7 +143,9 @@
 			"type": "shell",
 			"command": "foreach ($line in (Get-Content -Path ./art/packList.txt)) { java -cp ./tools/runnable-texturepacker.jar com.badlogic.gdx.tools.texturepacker.TexturePacker art/$line res/atlas $line }",
 			"options": {
-				"shell": {"executable": "powershell.exe"}
+				"shell": {
+					"executable": "powershell.exe"
+				}
 			},
 			"presentation": {
 				"reveal": "silent",
@@ -159,6 +159,57 @@
 				"$haxe-trace"
 			],
 			"detail": "Pack all textures in art into an atlas in res/atlas"
+		},
+		{
+			"label": "Butler dx",
+			"type": "shell",
+			"command": "butler push redist/directx/_GAME_NAME_ Grim0/_GAME_NAME_:win-32",
+			"presentation": {
+				"reveal": "always",
+				"revealProblems": "onProblem",
+				"panel": "shared"
+			},
+			"problemMatcher": [
+				"$haxe-absolute",
+				"$haxe",
+				"$haxe-error",
+				"$haxe-trace"
+			],
+			"detail": "Push the redist files on butler"
+		},
+		{
+			"label": "Butler sdl",
+			"type": "shell",
+			"command": "butler push redist/opengl_win/_GAME_NAME_ Grim0/_GAME_NAME_:win-32-sdl",
+			"presentation": {
+				"reveal": "always",
+				"revealProblems": "onProblem",
+				"panel": "shared"
+			},
+			"problemMatcher": [
+				"$haxe-absolute",
+				"$haxe",
+				"$haxe-error",
+				"$haxe-trace"
+			],
+			"detail": "Push the redist files on butler"
+		},
+		{
+			"label": "Butler js",
+			"type": "shell",
+			"command": "butler push redist/js.zip Grim0/_GAME_NAME_:js",
+			"presentation": {
+				"reveal": "always",
+				"revealProblems": "onProblem",
+				"panel": "shared"
+			},
+			"problemMatcher": [
+				"$haxe-absolute",
+				"$haxe",
+				"$haxe-error",
+				"$haxe-trace"
+			],
+			"detail": "Push the redist files on butler"
 		},
 		{
 			"label": "Git latest",
