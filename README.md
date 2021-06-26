@@ -7,7 +7,7 @@ And using **Heaps** (https://heaps.io), a 2D/3D Haxe library (*ie.* an Haxelib).
 
 # Installation & usage
 
-- First you can follow points 1 to 5 of this tutorial from *Sébastien Bénard* : https://deepnight.net/tutorial/a-quick-guide-to-installing-haxe/
+- First you can follow points 1 to 5 of this tutorial from *@deepnight* : https://deepnight.net/tutorial/a-quick-guide-to-installing-haxe/
 - Install libs as follow : 
 	- `haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git`
 	- `haxelib git castle https://github.com/ncannasse/castle.git`
