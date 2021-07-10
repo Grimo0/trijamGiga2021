@@ -93,6 +93,11 @@ class Main extends dn.Process {
 			new Game();
 	}
 
+	override function onDispose() {
+		super.onDispose();
+		hxd.snd.Manager.get().dispose();
+	}
+
 	override function update() {
 		super.update();
 
