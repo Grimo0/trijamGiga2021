@@ -178,9 +178,26 @@
 			"detail": "Push the redist files on butler"
 		},
 		{
-			"label": "Butler sdl",
+			"label": "Butler sdl win",
 			"type": "shell",
 			"command": "butler push redist/opengl_win/_GAME_NAME_ Grim0/_GAME_NAME_:win-32-sdl",
+			"presentation": {
+				"reveal": "always",
+				"revealProblems": "onProblem",
+				"panel": "shared"
+			},
+			"problemMatcher": [
+				"$haxe-absolute",
+				"$haxe",
+				"$haxe-error",
+				"$haxe-trace"
+			],
+			"detail": "Push the redist files on butler"
+		},
+		{
+			"label": "Butler sdl mac",
+			"type": "shell",
+			"command": "butler push redist/opengl_mac/_GAME_NAME_ Grim0/_GAME_NAME_:mac-sdl",
 			"presentation": {
 				"reveal": "always",
 				"revealProblems": "onProblem",
