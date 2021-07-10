@@ -69,7 +69,7 @@ class Game extends Process {
 
 		root.alpha = 0;
 		startLevel();
-		tw.createS(root.alpha, 1, #if debug 0 #else 1 #end);
+		tw.createS(root.alpha, 1, #if debug 0 #else .3 #end);
 	}
 
 	public static function load() {
@@ -109,7 +109,7 @@ class Game extends Process {
 	public function transition(levelUID : Null<Int>, event : String = null, ?onDone : Void->Void) {
 		locked = true;
 
-		Main.ME.tw.createS(root.alpha, 0, #if debug 0 #else 1 #end).onEnd = function() {
+		Main.ME.tw.createS(root.alpha, 0, #if debug 0 #else .3 #end).onEnd = function() {
 			if (levelUID == null) {
 				save();
 
@@ -121,7 +121,7 @@ class Game extends Process {
 
 				startLevel(levelUID);
 
-				Main.ME.tw.createS(root.alpha, 1, #if debug 0 #else 1 #end);
+				Main.ME.tw.createS(root.alpha, 1, #if debug 0 #else .3 #end);
 			}
 
 			if (onDone != null)
