@@ -184,8 +184,8 @@ class Game extends Process {
 			curGameSpeed = targetGameSpeed;
 	}
 
-	public inline function stopFrame() {
-		ucd.setS("stopFrame", 0.2);
+	public inline function stopFrame(time = .2) {
+		ucd.setS("stopFrame", time);
 	}
 
 	override function preUpdate() {
