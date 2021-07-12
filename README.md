@@ -22,6 +22,13 @@ And using **Heaps** (https://heaps.io), a 2D/3D Haxe library (*ie.* an Haxelib).
 - Execute the task `Pack textures`
 - Press F5 to launch the game in debug or use the command bar buttons (see below)
 
+# Distribution
+
+- Install Butler as described here : https://itch.io/docs/butler/installing.html
+- Change `_GAME_NAME_` in .vscode/tasks.json
+- Add it to your path 
+- Execute the Redist task then the Butler dx one
+
 ## Tools and optionnal setup
 
 - Visual Studio Code Command bar (id: gsppvo.vscode-commandbar) is recommended.
