@@ -54,10 +54,18 @@ https://gist.github.com/Yanrishatum/ae3725a9e2b45e0766c065e573ed1f24
 
 https://gist.github.com/Yanrishatum/d69ed72e368e35b18cbfca726d81279a
 
-
 ## Package and distribute with HashLink
 
 https://github.com/HaxeFoundation/hashlink/wiki/Distribution-&--Packaging
+
+## Optimizing bitmaps (excerpt from Heaps documentation)
+
+- Use power of 2 sizes for textures
+- For fast tile rendering, use h2d.TileGroup
+- Have a lot of separate bitmaps? Combine them in one texture.
+- For particle rendering, use h2d.SpriteBatch
+- see https://heaps.io/documentation/drawing-tiles.html
+- and https://heaps.io/documentation/resource-management.html
 
 # Other ressources
 
