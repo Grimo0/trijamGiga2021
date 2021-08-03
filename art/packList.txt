@@ -1,4 +1,0 @@
-placeholders
-ui
-fx
-entities

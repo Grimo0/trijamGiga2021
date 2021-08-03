@@ -4,7 +4,7 @@
 	"skipErrorMessage": true,
 	"commands": [
 		{
-			"text": "🍊 HL",
+			"text": "🍊HL",
 			"color": "orange",
 			"commandType":"palette",
 			"command": "workbench.action.tasks.runTask|HL release",
@@ -21,7 +21,7 @@
 			"priority": -11
 		},
 		{
-			"text": "🍪 JS",
+			"text": "🍪JS",
 			"color": "yellow",
 			"commandType":"palette",
 			"command": "workbench.action.tasks.runTask|JS release",
@@ -38,7 +38,7 @@
 			"priority": -13
 		},
 		{
-			"text": "🧹 Format src",
+			"text": "🧹Format src",
 			"color": "white",
 			"commandType":"palette",
 			"command": "workbench.action.tasks.runTask|Src Formatter",
@@ -47,7 +47,7 @@
 			"priority": -20
 		},
 		{
-			"text": "🧱 Pack textures",
+			"text": "🧱Pack textures",
 			"color": "white",
 			"commandType":"palette",
 			"command": "workbench.action.tasks.runTask|Pack textures",
@@ -56,7 +56,16 @@
 			"priority": -21
 		},
 		{
-			"text": "💬 Build POT",
+			"text": "🎶Pack music",
+			"color": "white",
+			"commandType":"palette",
+			"command": "workbench.action.tasks.runTask|Pack music",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -22
+		},
+		{
+			"text": "💬Build POT",
 			"color": "white",
 			"commandType":"palette",
 			"command": "workbench.action.tasks.runTask|Lang",
@@ -65,7 +74,7 @@
 			"priority": -40
 		},
 		{
-			"text": "📦 Redist",
+			"text": "📦Redist",
 			"color": "lightgreen",
 			"commandType":"palette",
 			"command": "workbench.action.tasks.runTask|HL redist",
@@ -74,7 +83,7 @@
 			"priority": -50
 		},
 		{
-			"text": "📦 Redist JS",
+			"text": "📦Redist JS",
 			"color": "lightgreen",
 			"commandType":"palette",
 			"command": "workbench.action.tasks.runTask|JS redist",

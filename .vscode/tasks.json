@@ -141,12 +141,7 @@
 		{
 			"label": "Pack textures",
 			"type": "shell",
-			"command": "foreach($line in (Get-Content -Path ./art/PackList.txt)){ $art = Get-Item art/$line; $atlas = if (Test-Path res/atlas/$line.atlas){ Get-Item res/atlas/$line.atlas }; if(-not $atlas -or $atlas.LastWriteTime -lt $art.LastWriteTime){ java -cp ./tools/runnable-texturepacker.jar com.badlogic.gdx.tools.texturepacker.TexturePacker art/$line res/atlas $line; (Get-Item res/atlas/$line.atlas).LastWriteTime = $art.LastWriteTime } }",
-			"options": {
-				"shell": {
-					"executable": "powershell.exe"
-				}
-			},
+			"command": "./tools/packTexture.sh",
 			"presentation": {
 				"reveal": "silent",
 				"revealProblems": "onProblem",
@@ -159,6 +154,23 @@
 				"$haxe-trace"
 			],
 			"detail": "Pack all textures in art into an atlas in res/atlas"
+		},
+		{
+			"label": "Pack music",
+			"type": "shell",
+			"command": "./tools/packMusic.sh",
+			"presentation": {
+				"reveal": "silent",
+				"revealProblems": "onProblem",
+				"panel": "shared"
+			},
+			"problemMatcher": [
+				"$haxe-absolute",
+				"$haxe",
+				"$haxe-error",
+				"$haxe-trace"
+			],
+			"detail": "Pack all music in music into res/music"
 		},
 		{
 			"label": "Butler dx",
