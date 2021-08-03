@@ -141,7 +141,7 @@
 		{
 			"label": "Pack textures",
 			"type": "shell",
-			"command": "foreach ($line in (Get-Content -Path ./art/PackList.txt)) { java -cp ./tools/runnable-texturepacker.jar com.badlogic.gdx.tools.texturepacker.TexturePacker art/$line res/atlas $line }",
+			"command": "foreach($line in (Get-Content -Path ./art/PackList.txt)){ $art = Get-Item art/$line; $atlas = if (Test-Path res/atlas/$line.atlas){ Get-Item res/atlas/$line.atlas }; if(-not $atlas -or $atlas.LastWriteTime -lt $art.LastWriteTime){ java -cp ./tools/runnable-texturepacker.jar com.badlogic.gdx.tools.texturepacker.TexturePacker art/$line res/atlas $line; (Get-Item res/atlas/$line.atlas).LastWriteTime = $art.LastWriteTime } }",
 			"options": {
 				"shell": {
 					"executable": "powershell.exe"
