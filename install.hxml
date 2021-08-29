@@ -1,0 +1,7 @@
+-lib hldx
+-lib hlsdl
+-lib deepnightLibs:git:https://github.com/deepnight/deepnightLibs.git
+-lib castle:git:https://github.com/ncannasse/castle.git
+-lib heaps:git:https://github.com/HeapsIO/heaps.git
+-lib redistHelper
+-lib formatter
