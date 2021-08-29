@@ -7,11 +7,13 @@ class GameTwo extends Game {
 	}
 
 	public function new() {
+		name = 'GameTwo';
 		super();
-		name = 'gameTwo';
+		
+		startLevel(2);
 	}
 
 	public static function load() {		
-		savData = hxd.Save.load(savData, 'save/gameOne');
+		savData = hxd.Save.load(savData, 'save/GameTwo');
 	}
 }

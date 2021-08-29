@@ -71,7 +71,6 @@ class Game extends Process {
 		hud = new ui.Hud();
 
 		root.alpha = 0;
-		startLevel();
 		tw.createS(root.alpha, 1, #if debug 0 #else .3 #end);
 	}
 
@@ -95,13 +94,13 @@ class Game extends Process {
 		return f != null ? f : 0;
 	}
 
-	function startLevel(?levelUID : Int) {
+	function startLevel(levelUID : Int) {
 		locked = false;
 		started = false;
 
 		scroller.removeChildren();
 
-		level.initLevel();
+		level.initLevel(levelUID);
 
 		resume();
 		Process.resizeAll();

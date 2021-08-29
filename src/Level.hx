@@ -26,19 +26,12 @@ class Level extends dn.Process {
 	public inline function getFloor(cx, cy) : Int
 		return 0;
 
-	override function init() {
-		super.init();
-
-		if (root != null)
-			initLevel();
-	}
-
-	public function initLevel() {
+	public function initLevel(levelUID : Int) {
 		game.scroller.add(root, Const.GAME_SCROLLER_LEVEL);
 		root.removeChildren();
 
 		// Get level background image
-		background = Assets.levels.getBitmap('Background');
+		background = Assets.levels.getBitmap('Background$levelUID');
 		background.width = background.tile.width;
 		background.height = background.tile.height;
 		root.add(background, Const.GAME_LEVEL_BG);

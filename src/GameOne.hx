@@ -5,13 +5,15 @@ class GameOne extends Game {
 	public override function get_sav() : GameSave {
 		return savData;
 	}
-	
+
 	public function new() {
+		name = 'GameOne';
 		super();
-		name = 'gameOne';
+
+		startLevel(1);
 	}
 
 	public static function load() {		
-		savData = hxd.Save.load(savData, 'save/gameOne');
+		savData = hxd.Save.load(savData, 'save/GameOne');
 	}
 }
