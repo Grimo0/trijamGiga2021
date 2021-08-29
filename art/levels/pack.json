@@ -1,0 +1,22 @@
+{
+	"pot": true,
+	"paddingX": 1,
+	"paddingY": 1,
+	"rotation": false,
+	"minWidth": 16,
+	"minHeight": 16,
+	"maxWidth": 2048,
+	"maxHeight": 2048,
+	// "stripWhitespaceX": true,
+	// "stripWhitespaceY": true,
+	"filterMin": "Nearest",
+	"filterMag": "Nearest",
+	"format": "RGBA8888",
+	"fast": true,
+	"debug": false,
+	"combineSubdirectories": false,
+	"flattenPaths": false,
+	"premultiplyAlpha": false,
+	"limitMemory": true,
+	"grid": false
+}

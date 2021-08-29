@@ -36,8 +36,7 @@ class Level extends dn.Process {
 		root.removeChildren();
 
 		// Get level background image
-		// root.add(background, Const.GAME_LEVEL_BG);
-		
-		// TODO Level loading & rendering
+		var background = Assets.levels.getBitmap('Background');
+		root.add(background, Const.GAME_LEVEL_BG);
 	}
 }

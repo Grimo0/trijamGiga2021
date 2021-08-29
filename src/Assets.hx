@@ -11,6 +11,7 @@ class Assets {
 	public static var ui : SpriteLib;
 	public static var fx : SpriteLib;
 	public static var entities : SpriteLib;
+	public static var levels : SpriteLib;
 
 	static var initDone = false;
 
@@ -56,5 +57,6 @@ class Assets {
 		ui = dn.heaps.assets.Atlas.load("atlas/ui.atlas");
 		fx = dn.heaps.assets.Atlas.load("atlas/fx.atlas");
 		entities = dn.heaps.assets.Atlas.load("atlas/entities.atlas");
+		levels = dn.heaps.assets.Atlas.load("atlas/levels.atlas");
 	}
 }
