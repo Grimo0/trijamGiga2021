@@ -60,10 +60,10 @@ class Game extends Process {
 		scroller = new h2d.Layers();
 		root.add(scroller, Const.GAME_SCROLLER);
 
+		level = new Level();
 		camera = new Camera();
 		camera.frict = 0.1;
 		camera.targetS = 0.1;
-		level = new Level();
 		fx = new Fx();
 		hud = new ui.Hud();
 
