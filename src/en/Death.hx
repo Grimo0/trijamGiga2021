@@ -59,10 +59,12 @@ class Death extends h2d.Object {
 		game.tw.createMs(x, x + 400, 500);
 		game.tw.createMs(y, y - 10, 100).chainMs(prevY, 400);
 		game.tw.createMs(rotation, -dir * M.PIHALF * 0.1, 100).chainMs(dir * M.PIHALF * 0.3, 400).end(() -> {
+			state = Passive;
+			character.isDead = true;
 			game.tw.createMs(x, prevX, 200);
 			game.tw.createMs(y, prevY, 200);
 			game.tw.createMs(rotation, 0, 200);
-			state = Passive;
+			cast(game, GameOne).characterKilled();
 		});
 	}
 }

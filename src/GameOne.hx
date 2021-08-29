@@ -53,4 +53,11 @@ class GameOne extends Game {
 		level.root.add(death, Const.GAME_LEVEL_ENTITIES);
 		death.y = level.pxHei * 1.05 - death.getSize().height;
 	}
+
+	public function characterKilled() {
+		locked = true;
+		cd.setMs('CharacterKilled', 1000, () -> {
+			startLevel(1);
+		});
+	}
 }
