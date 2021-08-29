@@ -6,7 +6,7 @@ cd $SCRIPT_RELATIVE_DIR/..
 
 while read line; do
 	if [ ! -d "art/$line" ]; then
-		>&2 echo "Can't find $line in art"
+		echo "Can't find $line in art"
 		continue
 	fi
 

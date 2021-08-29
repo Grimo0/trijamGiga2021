@@ -4,6 +4,10 @@
 SCRIPT_RELATIVE_DIR=$(dirname "${BASH_SOURCE[0]}") 
 cd $SCRIPT_RELATIVE_DIR/..
 
+if [ ! -d "res/music/" ]; then
+	mkdir "res/music"
+fi
+
 while read line; do
 	IFS=';'					# ; is set as delimiter
 	read -ra f <<< "$line"	# read into an array as tokens separated by IFS
