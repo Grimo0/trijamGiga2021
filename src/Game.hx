@@ -5,11 +5,6 @@ import hxd.Key;
 class Game extends Process {
 	public static var ME : Game;
 
-	public static var sav(get, never) : GameSave;
-	public static function get_sav() : GameSave {
-		return null;
-	}
-
 	/** Game controller (pad or keyboard) **/
 	public var ca : dn.heaps.Controller.ControllerAccess;
 
@@ -27,6 +22,11 @@ class Game extends Process {
 
 	/** UI **/
 	public var hud : ui.Hud;
+
+	@:isVar public var sav(get, never) : GameSave;
+	public function get_sav() : GameSave {
+		return null;
+	}
 
 	public var locked(default, set) = false;
 	public function set_locked(l) {

@@ -56,8 +56,10 @@ class Main extends dn.Process {
 		new Options();
 		Options.ME.load();
 
-		Game.sav.init();
-		Game.load();
+		GameOne.savData.init();
+		GameOne.load();
+		GameTwo.savData.init();
+		GameTwo.load();
 
 		// Start
 		hxd.Timer.skip();
@@ -128,12 +130,12 @@ class Main extends dn.Process {
 
 		if (ImGui.button('New game 1', halfBtnSize)) {
 			hxd.Save.delete('save/gameOne');
-			Game.sav.init();
+			Game.savData.init();
 			delayer.addF(startGameOne, 1);
 		}
 		if (ImGui.button('New game 2', halfBtnSize)) {
 			hxd.Save.delete('save/gameTwo');
-			Game.sav.init();
+			Game.savData.init();
 			delayer.addF(startGameTwo, 1);
 		}
 		ImGui.separator();

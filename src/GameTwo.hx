@@ -2,7 +2,7 @@ class GameTwo extends Game {
 
 	public static var savData : GameSave = new GameSave();
 
-	public static function get_sav() : GameSave {
+	public override function get_sav() : GameSave {
 		return savData;
 	}
 
@@ -12,6 +12,6 @@ class GameTwo extends Game {
 	}
 
 	public static function load() {		
-		savData = hxd.Save.load(savData, 'save/gameTwo');
+		savData = hxd.Save.load(savData, 'save/gameOne');
 	}
 }
