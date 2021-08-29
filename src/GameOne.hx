@@ -26,9 +26,7 @@ class GameOne extends Game {
 	override function startLevel(levelUID:Int) {
 		super.startLevel(levelUID);
 
-		level.root.add(death, Const.GAME_LEVEL_ENTITIES);
-		death.y = level.pxHei * 1.05 - death.getSize().height;
-
+		// -- Pick characters
 		var allChars = ECharacter.createAll();
 		var chosenChars = new Array<ECharacter>();
 		for (i in 0...3) {
@@ -42,10 +40,17 @@ class GameOne extends Game {
 		var offset = level.pxWid * .2;
 		for (character in chosenChars) {
 			var char = new Character(character);
+			char.onClick = (e : hxd.Event) -> {
+				death.kill(char);
+			};
 			char.x = x;
 			char.y = level.pxHei - char.getSize().yMax;
 			x += offset;
 			level.root.add(char, Const.GAME_LEVEL_ENTITIES);
 		}
+		
+		// -- Death
+		level.root.add(death, Const.GAME_LEVEL_ENTITIES);
+		death.y = level.pxHei * 1.05 - death.getSize().height;
 	}
 }
