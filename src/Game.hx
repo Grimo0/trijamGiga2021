@@ -5,7 +5,10 @@ import hxd.Key;
 class Game extends Process {
 	public static var ME : Game;
 
-	public static var sav : GameSave = new GameSave();
+	public static var sav(get, never) : GameSave;
+	public static function get_sav() : GameSave {
+		return null;
+	}
 
 	/** Game controller (pad or keyboard) **/
 	public var ca : dn.heaps.Controller.ControllerAccess;
@@ -73,7 +76,6 @@ class Game extends Process {
 	}
 
 	public static function load() {
-		sav = hxd.Save.load(sav, 'save/game');
 	}
 
 	public function save() {
@@ -233,10 +235,6 @@ class Game extends Process {
 					return Main.ME.startMainMenu();
 			}
 			#end
-
-			// Restart
-			if (ca.selectPressed())
-				Main.ME.startGame();
 		}
 	}
 

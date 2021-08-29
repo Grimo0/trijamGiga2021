@@ -61,7 +61,7 @@ class Main extends dn.Process {
 
 		// Start
 		hxd.Timer.skip();
-		delayer.addF(startGame, 1);
+		delayer.addF(startMainMenu, 1);
 
 		#if debug
 		// debug = true;
@@ -81,16 +81,28 @@ class Main extends dn.Process {
 	}
 
 	/** Start game process **/
-	public function startGame() {
+	public function startGameOne() {
 		killAllChildrenProcesses();
 		
 		if (Game.ME != null) {
 			Game.ME.destroy();
 			delayer.addF(function() {
-				new Game();
+				new GameOne();
 			}, 1);
 		} else
-			new Game();
+			new GameOne();
+	}
+
+	public function startGameTwo() {
+		killAllChildrenProcesses();
+		
+		if (Game.ME != null) {
+			Game.ME.destroy();
+			delayer.addF(function() {
+				new GameTwo();
+			}, 1);
+		} else
+			new GameTwo();
 	}
 
 	override function onDispose() {
@@ -114,10 +126,15 @@ class Main extends dn.Process {
 		final tierBtnSize : ImVec2 = {x: ImGui.getColumnWidth() / 3 - 5, y: ImGui.getTextLineHeightWithSpacing()};
 		final strongColor : ImVec4 = {x: .67, y: .78, z: 1., w: 1.};
 
-		if (ImGui.button('New game', halfBtnSize)) {
+		if (ImGui.button('New game 1', halfBtnSize)) {
 			hxd.Save.delete('save/game');
-			Game.sav = new GameSave();
-			delayer.addF(startGame, 1);
+			Game.sav.init();
+			delayer.addF(startGameOne, 1);
+		}
+		if (ImGui.button('New game 2', halfBtnSize)) {
+			hxd.Save.delete('save/game');
+			Game.sav.init();
+			delayer.addF(startGameOne, 1);
 		}
 		ImGui.separator();
 		if (Options.ME != null && ImGui.treeNodeEx('Debug')) {
