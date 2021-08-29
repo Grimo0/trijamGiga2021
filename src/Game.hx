@@ -82,7 +82,7 @@ class Game extends Process {
 		sav.flags = flags.copy();
 		sav.levelUID = level.uniqId;
 
-		hxd.Save.save(sav, 'save/game');
+		hxd.Save.save(sav, 'save/$name');
 	}
 
 	public inline function setFlag(k : String, ?v = 1) flags.set(k, v);

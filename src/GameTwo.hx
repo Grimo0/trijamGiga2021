@@ -8,9 +8,10 @@ class GameTwo extends Game {
 
 	public function new() {
 		super();
+		name = 'gameTwo';
 	}
 
 	public static function load() {		
-		savData = hxd.Save.load(savData, 'save/game');
+		savData = hxd.Save.load(savData, 'save/gameTwo');
 	}
 }

@@ -127,12 +127,12 @@ class Main extends dn.Process {
 		final strongColor : ImVec4 = {x: .67, y: .78, z: 1., w: 1.};
 
 		if (ImGui.button('New game 1', halfBtnSize)) {
-			hxd.Save.delete('save/game');
+			hxd.Save.delete('save/gameOne');
 			Game.sav.init();
 			delayer.addF(startGameOne, 1);
 		}
 		if (ImGui.button('New game 2', halfBtnSize)) {
-			hxd.Save.delete('save/game');
+			hxd.Save.delete('save/gameTwo');
 			Game.sav.init();
 			delayer.addF(startGameTwo, 1);
 		}
