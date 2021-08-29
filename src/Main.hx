@@ -130,12 +130,12 @@ class Main extends dn.Process {
 
 		if (ImGui.button('New game 1', halfBtnSize)) {
 			hxd.Save.delete('save/gameOne');
-			Game.savData.init();
+			GameOne.savData.init();
 			delayer.addF(startGameOne, 1);
 		}
 		if (ImGui.button('New game 2', halfBtnSize)) {
 			hxd.Save.delete('save/gameTwo');
-			Game.savData.init();
+			GameTwo.savData.init();
 			delayer.addF(startGameTwo, 1);
 		}
 		ImGui.separator();
