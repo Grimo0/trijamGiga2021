@@ -80,7 +80,6 @@ class Game extends Process {
 
 	public function save() {
 		sav.flags = flags.copy();
-		sav.levelUID = level.uniqId;
 
 		hxd.Save.save(sav, 'save/$name');
 	}
@@ -102,7 +101,7 @@ class Game extends Process {
 
 		scroller.removeChildren();
 
-		level.currLevel = Assets.world.getLevel(levelUID != null ? levelUID : sav.levelUID);
+		level.initLevel();
 
 		resume();
 		Process.resizeAll();
@@ -117,8 +116,6 @@ class Game extends Process {
 
 				Main.ME.startMainMenu();
 			} else {
-				var level = Assets.world.getLevel(levelUID);
-				flags.set(level.identifier, 1);
 				save();
 
 				startLevel(levelUID);
@@ -247,12 +244,6 @@ class Game extends Process {
 			Const.MAX_CELLS_PER_WIDTH = Std.int(natArray[0]);
 			scroller.setScale(Const.SCALE);
 		}
-
-		var scenes = Assets.world.levels;
-		ImGui.comboWithArrow('currScene', Assets.world.levels.indexOf(level.currLevel), scenes,
-			(i : Int) -> Assets.world.levels[i].identifier,
-			(i : Int) -> transition(Assets.world.levels[i].uid));
-		ImGui.separator();
 
 		ImGui.alignTextToFramePadding();
 		ImGui.text('Scroller');
