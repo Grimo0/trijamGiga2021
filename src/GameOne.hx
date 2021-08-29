@@ -27,8 +27,8 @@ class GameOne extends Game {
 		super.startLevel(levelUID);
 
 		// -- Pick characters
-		var allChars = ECharacter.createAll();
-		var chosenChars = new Array<ECharacter>();
+		var allChars = Data.characters.all.toArrayCopy();
+		var chosenChars = new Array<Data.Characters>();
 		for (i in 0...3) {
 			var n = M.randRange(0, allChars.length - 1);
 			var char = allChars[n];
@@ -54,7 +54,7 @@ class GameOne extends Game {
 		death.y = level.pxHei * 1.05 - death.getSize().height;
 	}
 
-	public function characterKilled() {
+	public function characterKilled(char : Character) {
 		locked = true;
 		cd.setMs('CharacterKilled', 1000, () -> {
 			startLevel(1);

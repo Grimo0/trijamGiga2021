@@ -2,7 +2,7 @@ package en;
 
 @:allow(Game)
 class Character extends h2d.Object {
-	public var type(default, null) : ECharacter;
+	public var data(default, null) : Data.Characters;
 	
 	var interactive : Interactive;
 
@@ -14,14 +14,14 @@ class Character extends h2d.Object {
 		return isDead = b;		
 	}
 
-	public function new(?parent : h2d.Object, type : ECharacter) {
-		super(parent);
-		this.type = type;
+	public function new(data : Data.Characters) {
+		super();
+		this.data = data;
 
-		var bmpData = Assets.entities.getFrameData(type.getName());
-		var bmp = Assets.entities.getBitmap(type.getName());
+		var bmpData = Assets.entities.getFrameData(data.name);
+		var bmp = Assets.entities.getBitmap(data.name);
 		addChild(bmp);
-		deadFace = Assets.entities.getBitmap(type.getName() + '_Dead');
+		deadFace = Assets.entities.getBitmap(data.name + '_Dead');
 		deadFace.visible = false;
 		addChild(deadFace);
 

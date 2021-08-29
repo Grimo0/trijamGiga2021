@@ -64,7 +64,7 @@ class Death extends h2d.Object {
 			game.tw.createMs(x, prevX, 200);
 			game.tw.createMs(y, prevY, 200);
 			game.tw.createMs(rotation, 0, 200);
-			cast(game, GameOne).characterKilled();
+			cast(game, GameOne).characterKilled(character);
 		});
 	}
 }

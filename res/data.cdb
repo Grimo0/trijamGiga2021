@@ -1,5 +1,64 @@
 {
-	"sheets": [],
+	"sheets": [
+		{
+			"name": "characters",
+			"columns": [
+				{
+					"typeStr": "1",
+					"name": "name"
+				},
+				{
+					"typeStr": "5:Brown,Red,Green,Blond",
+					"name": "hairColor",
+					"display": null
+				},
+				{
+					"typeStr": "5:Short,Long",
+					"name": "hairSize",
+					"display": null
+				},
+				{
+					"typeStr": "2",
+					"name": "trouser",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"name": "Berry",
+					"hairColor": 0,
+					"hairSize": 1,
+					"trouser": false
+				},
+				{
+					"name": "Bleew",
+					"hairColor": 2,
+					"hairSize": 1,
+					"trouser": false
+				},
+				{
+					"name": "Cerise",
+					"hairColor": 0,
+					"hairSize": 0,
+					"trouser": true
+				},
+				{
+					"name": "Kao",
+					"hairColor": 3,
+					"hairSize": 0,
+					"trouser": true
+				},
+				{
+					"name": "Mylene",
+					"hairColor": 1,
+					"hairSize": 1,
+					"trouser": false
+				}
+			],
+			"separators": [],
+			"props": {}
+		}
+	],
 	"customTypes": [],
 	"compress": false
 }
