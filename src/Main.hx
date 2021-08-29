@@ -134,7 +134,7 @@ class Main extends dn.Process {
 		if (ImGui.button('New game 2', halfBtnSize)) {
 			hxd.Save.delete('save/game');
 			Game.sav.init();
-			delayer.addF(startGameOne, 1);
+			delayer.addF(startGameTwo, 1);
 		}
 		ImGui.separator();
 		if (Options.ME != null && ImGui.treeNodeEx('Debug')) {
