@@ -4,10 +4,12 @@ class Level extends dn.Process {
 	public var gridSize(get, never) : Int;
 	inline function get_gridSize() return Const.GRID;
 
-	public var cWid(get, never) : Int; inline function get_cWid() return Std.int(game.pxWid / gridSize);
-	public var cHei(get, never) : Int; inline function get_cHei() return Std.int(game.pxHei / gridSize);
-	public var pxWid(get, never) : Int; inline function get_pxWid() return game.pxWid;
-	public var pxHei(get, never) : Int; inline function get_pxHei() return game.pxHei;
+	public var cWid(get, never) : Int; inline function get_cWid() return Std.int(pxWid / gridSize);
+	public var cHei(get, never) : Int; inline function get_cHei() return Std.int(pxHei / gridSize);
+	public var pxWid(get, never) : Int; inline function get_pxWid() return background == null ? game.pxWid : Std.int(background.width);
+	public var pxHei(get, never) : Int; inline function get_pxHei() return background == null ? game.pxHei : Std.int(background.height);
+
+	var background : h2d.Bitmap;
 
 	public function new() {
 		super(game);
@@ -36,7 +38,19 @@ class Level extends dn.Process {
 		root.removeChildren();
 
 		// Get level background image
-		var background = Assets.levels.getBitmap('Background');
+		background = Assets.levels.getBitmap('Background');
+		background.width = background.tile.width;
+		background.height = background.tile.height;
 		root.add(background, Const.GAME_LEVEL_BG);
+	}
+
+	override function onResize() {
+		super.onResize();
+
+		var scaleX = game.pxWid / background.width;
+		var scaleY = game.pxHei / background.height;
+		root.setScale(scaleX > scaleY ? scaleX : scaleY);
+		root.x = (game.pxWid - background.width * root.scaleX) / 2;
+		root.y = (game.pxHei - background.height * root.scaleY) / 2;
 	}
 }
