@@ -168,7 +168,6 @@ class Camera extends dn.Process {
 	override function postUpdate() {
 		super.postUpdate();
 
-		if (!ui.Console.ME.hasFlag("scroll"))
-			apply();
+		apply();
 	}
 }
