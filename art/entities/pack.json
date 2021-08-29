@@ -1,7 +1,7 @@
 {
 	"pot": true,
-	"paddingX": 0,
-	"paddingY": 0,
+	"paddingX": 1,
+	"paddingY": 1,
 	"rotation": false,
 	"minWidth": 16,
 	"minHeight": 16,
@@ -12,7 +12,7 @@
 	"filterMin": "Nearest",
 	"filterMag": "Nearest",
 	"format": "RGBA8888",
-	"fast": false,
+	"fast": true,
 	"debug": false,
 	"combineSubdirectories": false,
 	"flattenPaths": false,
