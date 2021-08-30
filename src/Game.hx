@@ -1,6 +1,5 @@
 import en.Entity;
 import dn.Process;
-import hxd.Key;
 
 class Game extends Process {
 	public static var ME : Game;
@@ -68,6 +67,10 @@ class Game extends Process {
 
 		root.alpha = 0;
 		tw.createS(root.alpha, 1, #if debug 0 #else .3 #end);
+		
+		delayer.addF(() -> {
+			hxd.Window.getInstance().event(new hxd.Event(hxd.Event.EventKind.EMove, root.getScene().mouseX, root.getScene().mouseY));
+		}, 1);
 	}
 
 	public static function load() {
@@ -139,6 +142,8 @@ class Game extends Process {
 		for (e in Entity.ALL)
 			e.destroy();
 		gc();
+
+		ME = null;
 	}
 
 	/** Garbage collect any Entity marked for destruction **/
@@ -202,12 +207,6 @@ class Game extends Process {
 	/** Main loop **/
 	override function update() {
 		super.update();
-
-		if (!started) {
-			if (ca.startPressed()) {
-				started = true;
-			}
-		}
 
 		for (e in Entity.ALL)
 			if (!e.destroyed)

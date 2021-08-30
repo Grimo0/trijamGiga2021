@@ -20,6 +20,20 @@
 				{
 					"typeStr": "2",
 					"name": "eyesClosed"
+				},
+				{
+					"typeStr": "3",
+					"name": "assistance"
+				},
+				{
+					"typeStr": "3",
+					"name": "generosity",
+					"display": null
+				},
+				{
+					"typeStr": "3",
+					"name": "peace",
+					"display": null
 				}
 			],
 			"lines": [
@@ -27,43 +41,64 @@
 					"name": "Berry",
 					"hairColor": true,
 					"trouser": false,
-					"eyesClosed": true
+					"eyesClosed": true,
+					"assistance": 10,
+					"generosity": 10,
+					"peace": 10
 				},
 				{
 					"name": "Bleew",
 					"hairColor": false,
 					"trouser": false,
-					"eyesClosed": false
+					"eyesClosed": false,
+					"assistance": -5,
+					"generosity": 0,
+					"peace": 10
 				},
 				{
 					"name": "Cerise",
 					"hairColor": true,
 					"trouser": true,
-					"eyesClosed": false
+					"eyesClosed": false,
+					"assistance": 0,
+					"generosity": 15,
+					"peace": 0
 				},
 				{
 					"name": "Kao",
 					"hairColor": false,
 					"trouser": true,
-					"eyesClosed": false
+					"eyesClosed": false,
+					"assistance": -5,
+					"generosity": 10,
+					"peace": 0
 				},
 				{
 					"name": "Mylene",
 					"hairColor": false,
 					"trouser": false,
-					"eyesClosed": true
+					"eyesClosed": true,
+					"assistance": 10,
+					"generosity": -5,
+					"peace": 0
 				},
 				{
 					"name": "Appledew",
 					"hairColor": false,
 					"trouser": true,
-					"eyesClosed": true
+					"eyesClosed": true,
+					"assistance": 0,
+					"generosity": 10,
+					"peace": -5
 				},
 				{
 					"name": "Birmanie",
 					"hairColor": true,
 					"trouser": false,
-					"eyesClosed": false
+					"eyesClosed": false,
+					"assistance": 15,
+					"generosity": 0,
+					"peace": 0
 				}
 			],
 			"separators": [],

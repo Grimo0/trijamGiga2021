@@ -1,6 +1,5 @@
 import en.EAttribute;
 import en.Character;
-import en.ECharacter;
 
 class GameOne extends Game {
 
@@ -12,7 +11,7 @@ class GameOne extends Game {
 
 	public var hud : ui.HudOne;
 
-	var death : en.Death;
+	var death : en.gameOne.Death;
 	var ghostSpr : HSprite;
 	public var targetData(default, set) : Data.Characters;
 	public function set_targetData(d) {
@@ -34,7 +33,7 @@ class GameOne extends Game {
 		
 		hud = new ui.HudOne();
 
-		death = new en.Death();
+		death = new en.gameOne.Death();
 		ghostSpr = new HSprite(Assets.entities, 'Ghost');
 		ghostSpr.y = -300;
 		ghostSpr.x = -50;

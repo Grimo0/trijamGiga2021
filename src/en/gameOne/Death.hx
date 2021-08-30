@@ -1,36 +1,15 @@
-package en;
-
-import h2d.Bitmap;
+package en.gameOne;
 
 enum EState {
 	Passive;
-	ShowLeft;
-	ShowRight;
 	Killing;
 }
 
 class Death extends h2d.Object {
-	public var game(get, never) : Game;
-	inline function get_game() return Game.ME;
-
-	var arm : Bitmap;
+	public var game(get, never) : GameOne; inline function get_game() return cast(Game.ME, GameOne);
 
 	public var state(default, set) : EState = Passive;
 	public function set_state(s : EState) {
-		switch s {
-			case ShowLeft:
-				arm.visible = true;
-				arm.x = 0;
-				arm.scaleX = 1;
-			case ShowRight:
-				arm.visible = true;
-				arm.x = 50;
-				arm.scaleX = -1;
-			case Killing:
-				arm.visible = false;
-			case Passive:
-				arm.visible = false;
-		}
 		return state = s;
 	}
 
@@ -39,10 +18,6 @@ class Death extends h2d.Object {
 
 		var bmp = Assets.entities.getBitmap('Death');
 		addChild(bmp);
-		
-		arm = Assets.entities.getBitmap('Death_Arm');
-		arm.visible = false;
-		addChild(arm);
 	}
 
 	public function kill(character : Character) {
