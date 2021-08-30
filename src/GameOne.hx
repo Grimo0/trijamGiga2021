@@ -11,8 +11,9 @@ class GameOne extends Game {
 
 	var death : en.Death;
 	var ghostSpr : HSprite;
-	var target : Int;
-	var attrs : Array<en.EAttribute>;
+	var targetData : Data.Characters;
+	var targetAttrs : Array<en.EAttribute>;
+	public var note : Int;
 	
 	public function new() {
 		name = 'GameOne';
@@ -22,6 +23,9 @@ class GameOne extends Game {
 		ghostSpr = new HSprite(Assets.entities, 'Ghost');
 		ghostSpr.y = -300;
 		ghostSpr.x = -50;
+
+		note = 0;
+
 		startLevel(1);
 	}
 
@@ -114,7 +118,7 @@ class GameOne extends Game {
 		}
 
 		// Pick the target among the ones with the highest # of clues
-		target = M.randRange(0, nbTargets - 1);
+		var target = M.randRange(0, nbTargets - 1);
 		for (i in 0...targets.length) {
 			var clues = targets[i];
 			if (clues.length == higherClues){
@@ -165,11 +169,15 @@ class GameOne extends Game {
 		}
 
 		// -- Save the target's attrs list
-		attrs = targets[target];
+		targetAttrs = targets[target];
+		targetData = chosenChars[target];
 	}
 
 	public function characterKilled(char : Character) {
 		locked = true;
+
+		if (char.data == targetData)
+			note++;
 			
 		char.isDead = true;
 		ghostSpr.anim.play('Ghost').setSpeed(3 / Const.FPS).onEnd(() -> {
