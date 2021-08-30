@@ -8,6 +8,8 @@ class MainMenu extends Process {
 	public static var ME : MainMenu;
 
 	public var ca(default, null) : dn.heaps.Controller.ControllerAccess;
+	
+	var background : h2d.Bitmap;
 
 	public function new() {
 		super(Main.ME);
@@ -18,30 +20,32 @@ class MainMenu extends Process {
 		ca.setRightDeadZone(0.2);
 
 		createRootInLayers(Main.ME.root, Const.MAIN_LAYER_UI);
-		root.filter = new h2d.filter.ColorMatrix(); // force pixel perfect rendering
 
-		var bg = Assets.ui.getBitmap('menuBackground');
-		bg.setScale(1.04);
-		root.addChild(bg);
+		background = Assets.ui.getBitmap('MainMenu', root);
+		background.width = background.tile.width;
+		background.height = background.tile.height;
 
-		// Background moving with mouse
-		var bgSize = bg.getSize();
-		root.getScene().addEventListener(e -> {
-			if (e.kind != EventKind.EMove) return;
-			bg.x = -e.relX / w() * (bgSize.width - bg.tile.width);
-			bg.y = -e.relY / h() * (bgSize.height - bg.tile.height);
-		});
+		var interactive = new Interactive(background.width, background.height, root);
+		interactive.onClick = (e : hxd.Event) -> {
+			var bgSize = background.getSize();
+			if (e.relX < bgSize.width * 0.5) {
+				Main.ME.startGameOne();
+			} else {
+				Main.ME.startGameTwo();
+			}
+		};
 
 		Process.resizeAll();
-
-		delayer.addF(() -> {
-			hxd.Window.getInstance().event(new hxd.Event(hxd.Event.EventKind.EMove, root.getScene().mouseX, root.getScene().mouseY));
-		}, 1);
 	}
 
 	override function onResize() {
 		super.onResize();
-		root.setScale(Const.UI_SCALE);
+
+		var scaleX = Const.DEFAULT_WIDTH / background.width;
+		var scaleY = Const.DEFAULT_HEIGHT / background.height;
+		root.setScale(scaleX > scaleY ? scaleX : scaleY);
+		root.x = (Const.DEFAULT_WIDTH - background.width * root.scaleX) / 2;
+		root.y = (Const.DEFAULT_HEIGHT - background.height * root.scaleY) / 2;
 	}
 
 	override function update() {

@@ -3,6 +3,8 @@ class Const {
 	public static inline var FPS = 30;
 	public static inline var FIXED_FPS = 30;
 	public static inline var INFINITE = 999999;
+	public static inline var DEFAULT_WIDTH = 1280;
+	public static inline var DEFAULT_HEIGHT = 720;
 	public static var SCALE_AUTO_CWID(default, set) = -1; // -1 to disable auto-scaling on width
 	static inline function set_SCALE_AUTO_CWID(s) {
 		SCALE_AUTO_CWID = s;
@@ -49,7 +51,7 @@ class Const {
 			SCALE = M.ceil(dn.heaps.Scaler.getViewportHeight() / SCALE_AUTO_CHEI);
 		else
 			// can be replaced with another way to determine the game scaling
-			SCALE = dn.heaps.Scaler.bestFit_i(1280, 720);
+			SCALE = dn.heaps.Scaler.bestFit_i(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	}
 
 	/** Specific scaling for top UI elements **/
