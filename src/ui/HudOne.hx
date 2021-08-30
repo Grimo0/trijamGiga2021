@@ -16,7 +16,7 @@ class HudOne extends dn.Process {
 		Assets.ui.getBitmap('GameOne', root);
 
 		var x = 16;
-		var y = 12;
+		var y = 32;
 		var offsetX = 66;
 		for (i in 0...Const.GAMEONE_SCORE_MAX) {
 			var bmp = Assets.ui.getBitmap('Score', root);
@@ -38,9 +38,14 @@ class HudOne extends dn.Process {
 	public function targetUpdated() {
 		cluesArea.removeChildren();
 		
-		var x = 32;
-		var y = 128;
-		var offsetX = Std.int(300 / game.targetAttrs.length);
+		var nbClues = 0;
+		for (b in game.targetAttrs) {
+			if (b) nbClues++;
+		}
+		
+		var x = 48;
+		var y = 144;
+		var offsetX = Std.int(300 / nbClues);
 		for (i in 0...game.targetAttrs.length) {
 			if (!game.targetAttrs[i]) continue;
 			var attr = EAttribute.createByIndex(i);
