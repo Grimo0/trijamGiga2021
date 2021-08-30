@@ -1,4 +1,5 @@
 class Const {
+	public static inline var GAMEONE_SCORE_MAX = 5;
 	public static inline var FPS = 30;
 	public static inline var FIXED_FPS = 30;
 	public static inline var INFINITE = 999999;

@@ -8,7 +8,7 @@
 					"name": "name"
 				},
 				{
-					"typeStr": "5:Brown,Red,Green,Blond",
+					"typeStr": "2",
 					"name": "hairColor",
 					"display": null
 				},
@@ -25,43 +25,43 @@
 			"lines": [
 				{
 					"name": "Berry",
-					"hairColor": 0,
+					"hairColor": true,
 					"trouser": false,
 					"eyesClosed": true
 				},
 				{
 					"name": "Bleew",
-					"hairColor": 2,
+					"hairColor": false,
 					"trouser": false,
 					"eyesClosed": false
 				},
 				{
 					"name": "Cerise",
-					"hairColor": 0,
+					"hairColor": true,
 					"trouser": true,
 					"eyesClosed": false
 				},
 				{
 					"name": "Kao",
-					"hairColor": 3,
+					"hairColor": false,
 					"trouser": true,
 					"eyesClosed": false
 				},
 				{
 					"name": "Mylene",
-					"hairColor": 1,
+					"hairColor": false,
 					"trouser": false,
 					"eyesClosed": true
 				},
 				{
 					"name": "Appledew",
-					"hairColor": 1,
+					"hairColor": false,
 					"trouser": true,
 					"eyesClosed": true
 				},
 				{
 					"name": "Birmanie",
-					"hairColor": 0,
+					"hairColor": true,
 					"trouser": false,
 					"eyesClosed": false
 				}
