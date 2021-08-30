@@ -10,12 +10,15 @@ class GameOne extends Game {
 	}
 
 	var death : en.Death;
+	var ghostSpr : HSprite;
 	
 	public function new() {
 		name = 'GameOne';
 		super();
 
 		death = new en.Death();
+		ghostSpr = new HSprite(Assets.entities, 'Ghost');
+		ghostSpr.y = -300;
 		startLevel(1);
 	}
 
@@ -41,6 +44,7 @@ class GameOne extends Game {
 		for (character in chosenChars) {
 			var char = new Character(character);
 			char.onClick = (e : hxd.Event) -> {
+				char.filter.enable = false;
 				death.kill(char);
 			};
 			char.x = x;
@@ -56,7 +60,15 @@ class GameOne extends Game {
 
 	public function characterKilled(char : Character) {
 		locked = true;
-		cd.setMs('CharacterKilled', 1000, () -> {
+			
+		char.isDead = true;
+		ghostSpr.anim.play('Ghost').setSpeed(3 / Const.FPS).onEnd(() -> {
+			ghostSpr.setFrame(0);
+			ghostSpr.remove();
+		});
+		char.addChild(ghostSpr);
+
+		cd.setS('CharacterKilled', ghostSpr.anim.getDurationS(Const.FPS) + .1, () -> {
 			startLevel(1);
 		});
 	}
