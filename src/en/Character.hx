@@ -30,7 +30,7 @@ class Character extends h2d.Object {
 		interactive.onOut = onOut;
 		interactive.onClick = onClick;
 		
-		filter = new h2d.filter.DropShadow(0, 0.785, 0xFFFFCC, 1., 200, 1, 1, true);
+		filter = new h2d.filter.Glow(0xFFFFCC, 1., 200, 1, 1, true);
 		filter.enable = false;
 	}
 
