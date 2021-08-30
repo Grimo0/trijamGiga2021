@@ -28,7 +28,6 @@ class Character extends h2d.Object {
 		interactive = new Interactive(bmpData.realWid, bmpData.realHei, this);
 		interactive.onOver = onOver;
 		interactive.onOut = onOut;
-		interactive.onClick = onClick;
 		
 		filter = new h2d.filter.Glow(0xFFFFCC, 1., 200, 1, 1, true);
 		filter.enable = false;
