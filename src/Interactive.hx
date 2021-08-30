@@ -32,7 +32,7 @@ class Interactive extends h2d.Interactive {
 	override public function handleEvent( e : hxd.Event ) {
 		if (e.kind == EMove)
 			e.propagate = true;
-		if (Main.ME.controller.isLocked()) return;
+		if (Main.ME.controller.isLocked() || (Game.ME != null && Game.ME.ca.locked())) return;
 		super.handleEvent(e);
 	}
 	
