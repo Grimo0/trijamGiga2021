@@ -68,9 +68,11 @@ class Game extends Process {
 		root.alpha = 0;
 		tw.createS(root.alpha, 1, #if debug 0 #else .3 #end);
 		
+		#if hl
 		delayer.addF(() -> {
 			hxd.Window.getInstance().event(new hxd.Event(hxd.Event.EventKind.EMove, root.getScene().mouseX, root.getScene().mouseY));
 		}, 1);
+		#end
 	}
 
 	public static function load() {

@@ -71,9 +71,11 @@ class MainMenu extends Process {
 
 		Process.resizeAll();
 		
+		#if hl
 		delayer.addF(() -> {
 			hxd.Window.getInstance().event(new hxd.Event(hxd.Event.EventKind.EMove, root.getScene().mouseX, root.getScene().mouseY));
 		}, 1);
+		#end
 	}
 
 	override function onResize() {
