@@ -34,10 +34,12 @@ class Character extends h2d.Object {
 	}
 
 	function onOver(e : hxd.Event) {
+		if (!Std.isOfType(Game.ME, GameOne)) return;
 		filter.enable = true;
 	}
 
 	function onOut(e : hxd.Event) {
+		if (!Std.isOfType(Game.ME, GameOne)) return;
 		filter.enable = false;
 	}
 
