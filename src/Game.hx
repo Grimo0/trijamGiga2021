@@ -218,14 +218,8 @@ class Game extends Process {
 		}
 		#end
 
-		if (!ui.Console.ME.isActive() && !ui.Modal.hasAny()) {
-			#if hl
-			// Exit
-			if (ca.isPressed(START)) {
-				if (cd.hasSetS("exitWarn", 3))
-					return Main.ME.startMainMenu();
-			}
-			#end
+		if (ca.isPressed(START)) {
+			return Main.ME.startMainMenu();
 		}
 	}
 

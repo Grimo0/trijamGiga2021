@@ -233,7 +233,7 @@ class GameOne extends Game {
 			if (score < Const.GAMEONE_SCORE_MAX)
 				startLevel(1);
 			else
-				Main.ME.startMainMenu();
+				Main.ME.startLetter('GameOne_LetterEnd', () -> Main.ME.startMainMenu());
 		});
 	}
 }

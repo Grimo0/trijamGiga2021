@@ -63,9 +63,9 @@ class MainMenu extends Process {
 		interactive.onClick = (e : hxd.Event) -> {
 			var bgSize = background.getSize();
 			if (e.relX < bgSize.width * 0.5) {
-				Main.ME.startGameOne();
+				Main.ME.startLetter('GameOne_LetterIntro', () -> Main.ME.startGameOne());
 			} else {
-				Main.ME.startGameTwo();
+				Main.ME.startLetter('GameTwo_LetterIntro', () -> Main.ME.startGameTwo());
 			}
 		};
 

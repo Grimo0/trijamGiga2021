@@ -1,3 +1,4 @@
+import ui.Letter;
 import ui.MainMenu;
 import hxd.Key;
 
@@ -83,7 +84,11 @@ class Main extends dn.Process {
 			new MainMenu();
 	}
 
-	/** Start game process **/
+	public function startLetter(name : String, cb : Void -> Void) {
+		killAllChildrenProcesses();
+		new Letter(name, cb);
+	}
+
 	public function startGameOne() {
 		killAllChildrenProcesses();
 		
