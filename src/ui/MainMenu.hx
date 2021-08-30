@@ -10,6 +10,8 @@ class MainMenu extends Process {
 	public var ca(default, null) : dn.heaps.Controller.ControllerAccess;
 	
 	var background : h2d.Bitmap;
+	var gameOne : h2d.Bitmap;
+	var gameTwo : h2d.Bitmap;
 
 	public function new() {
 		super(Main.ME);
@@ -24,8 +26,34 @@ class MainMenu extends Process {
 		background = Assets.ui.getBitmap('MainMenu', root);
 		background.width = background.tile.width;
 		background.height = background.tile.height;
+		
+		gameOne = Assets.ui.getBitmap('MainMenu_GameOne', root);
+		gameOne.width = gameOne.tile.width;
+		gameOne.height = gameOne.tile.height;
+		gameOne.filter = new h2d.filter.Glow(0x883333, .8, 100, 1, 1, true);
+		gameOne.filter.enable = false;
+
+		gameTwo = Assets.ui.getBitmap('MainMenu_GameTwo', root);
+		gameTwo.width = gameTwo.tile.width;
+		gameTwo.height = gameTwo.tile.height;
+		gameTwo.filter = new h2d.filter.Glow(0x883333, .8, 100, 1, 1, true);
+		gameTwo.filter.enable = false;
 
 		var interactive = new Interactive(background.width, background.height, root);
+		interactive.onMove = (e : hxd.Event) -> {
+			var bgSize = background.getSize();
+			if (e.relX < bgSize.width * 0.5) {
+				gameOne.filter.enable = true;
+				gameTwo.filter.enable = false;
+			} else {
+				gameOne.filter.enable = false;
+				gameTwo.filter.enable = true;
+			}
+		};
+		interactive.onOut = (e : hxd.Event) -> {
+			gameOne.filter.enable = false;
+			gameTwo.filter.enable = false;
+		};
 		interactive.onClick = (e : hxd.Event) -> {
 			var bgSize = background.getSize();
 			if (e.relX < bgSize.width * 0.5) {
@@ -36,6 +64,10 @@ class MainMenu extends Process {
 		};
 
 		Process.resizeAll();
+		
+		delayer.addF(() -> {
+			hxd.Window.getInstance().event(new hxd.Event(hxd.Event.EventKind.EMove, root.getScene().mouseX, root.getScene().mouseY));
+		}, 1);
 	}
 
 	override function onResize() {
