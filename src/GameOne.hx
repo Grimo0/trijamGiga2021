@@ -178,7 +178,7 @@ class GameOne extends Game {
 		});
 		char.addChild(ghostSpr);
 
-		cd.setS('CharacterKilled', ghostSpr.anim.getDurationS(Const.FPS) + .1, () -> {
+		cd.setS('NewLevel', ghostSpr.anim.getDurationS(Const.FPS) + .1, () -> {
 			startLevel(1);
 		});
 	}
