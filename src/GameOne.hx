@@ -13,12 +13,8 @@ class GameOne extends Game {
 
 	var death : en.gameOne.Death;
 	var ghostSpr : HSprite;
-	public var targetData(default, set) : Data.Characters;
-	public function set_targetData(d) {
-		targetData = d;
-		hud.targetUpdated();
-		return targetData;
-	}
+	public var targetHasCat(default, null) : Bool;
+	public var targetData(default, null) : Data.Characters;
 	public var targetAttrs(default, null) : Array<Bool>;
 	public var score(default, set) : Int;
 	public function set_score(s : Int) {
@@ -52,13 +48,13 @@ class GameOne extends Game {
 
 		final nbPeople = 3;
 		
-		var targets = new Array<Array<Bool>>();
+		var peopleShare = new Array<Array<Bool>>();
 		var allAttrs = EAttribute.createAll();
-		targets.resize(nbPeople);
-		for (i in 0...targets.length) {
-			targets[i] = new Array<Bool>();
+		peopleShare.resize(nbPeople);
+		for (i in 0...peopleShare.length) {
+			peopleShare[i] = new Array<Bool>();
 			for (j in 0...allAttrs.length) {
-				targets[i][j] = false;
+				peopleShare[i][j] = false;
 			}
 		}
 		
@@ -90,65 +86,62 @@ class GameOne extends Game {
 			level.root.add(char, Const.GAME_LEVEL_ENTITIES);
 		}
 
-		// -- Mission
-		var links = new Array<Array<Int>>();
-		for (i in 0...chosenChars.length) {
-			var others = new Array<Int>();
-			links.push(others);
-			for (j in 0...chosenChars.length)
-				others[j] = 0;
+		// -- Cats
+		var removedCat = M.randRange(0, 2);
+		@:privateAccess(Level)
+		for (i in 0...3) {
+			if (i == removedCat) continue;
+			peopleShare[i][Cat.getIndex()] = true;
+
+			var catBg = Assets.levels.getBitmap('Background${levelUID}_Cat${i + 1}');
+			level.root.add(catBg, Const.GAME_LEVEL_BG);
 		}
 
+		// -- Mission
 		for (i in 0...chosenChars.length) {
 			for (j in i + 1...chosenChars.length) {
 				if (chosenChars[i].hairColor == chosenChars[j].hairColor) {
-					targets[i][HairColor.getIndex()] = true;
-					targets[j][HairColor.getIndex()] = true;
-					links[i][j]++;
-					links[j][i]++;
+					peopleShare[i][HairColor.getIndex()] = true;
+					peopleShare[j][HairColor.getIndex()] = true;
 				}
 				if (chosenChars[i].trouser == chosenChars[j].trouser) {
-					targets[i][Trouser.getIndex()] = true;
-					targets[j][Trouser.getIndex()] = true;
-					links[i][j]++;
-					links[j][i]++;
+					peopleShare[i][Trouser.getIndex()] = true;
+					peopleShare[j][Trouser.getIndex()] = true;
 				}
 				if (chosenChars[i].eyesClosed == chosenChars[j].eyesClosed) {
-					targets[i][EyesClosed.getIndex()] = true;
-					targets[j][EyesClosed.getIndex()] = true;
-					links[i][j]++;
-					links[j][i]++;
+					peopleShare[i][EyesClosed.getIndex()] = true;
+					peopleShare[j][EyesClosed.getIndex()] = true;
 				}
 			}
 		}
 
-		// Target must have at least 2 clues
+		// Target must have at least 2 clues in common with the other
 		var higherClues = 2;
 		var nbTargets = 0;
-		for (i in 0...targets.length) {
-			var clues = targets[i];
+		for (i in 0...peopleShare.length) {
+			var clues = peopleShare[i];
 			var nbClues = 0;
 			for (b in clues) {
 				if (b) nbClues++;
 			}
 			if (nbClues >= higherClues) {
-				if (higherClues < nbClues) {
-					nbTargets = 1;
-					higherClues = nbClues;
-				} else
-					nbTargets++;
+				nbTargets++;
 			}
+		}
+		if (nbTargets == 0) {
+			startLevel(levelUID);
+			return;
 		}
 
 		// Pick the target among the ones with the highest # of clues
 		var target = M.randRange(0, nbTargets - 1);
-		for (i in 0...targets.length) {
-			var clues = targets[i];
+		for (i in 0...peopleShare.length) {
+			var clues = peopleShare[i];
 			var nbClues = 0;
 			for (b in clues) {
 				if (b) nbClues++;
 			}
-			if (nbClues == higherClues){
+			if (nbClues >= higherClues){
 				if (target == 0) {
 					target = i;
 					break;
@@ -157,63 +150,45 @@ class GameOne extends Game {
 			}
 		}
 
-		// -- Cats
-		var cats = new Array<Int>();
-		for (i in 0...3) 
-			cats[i] = i;
+		// Pick the clues
+		targetAttrs = new Array<Bool>();
+		targetAttrs.resize(allAttrs.length);
 
-		if (nbTargets > 1) {
-			// If too many potential targets, remove cat from the ones with the more links with the target
-			var higherLinks = 0;
-			for (i in 0...M.imin(cats.length, targets.length)) {
-				var nbLinks = links[target][i];
-				if (higherLinks < nbLinks) {
-					higherLinks = nbLinks;
-				}
-			}
-			for (i in 0...M.imin(cats.length, targets.length)) {
-				var nbLinks = links[target][i];
-				if (higherLinks == nbLinks) {
-					cats.remove(i);
-				}
-			}
-		} else if (targets[target].length < 3) {
-			// The cat is one more clue to give to the target
-			var removedCat = M.randRange(0, cats.length - 2);
-			if (removedCat >= target) removedCat++;
-			cats.remove(cats[removedCat]);
-		} else {
-			var removedCat = M.randRange(0, cats.length - 1);
-			cats.remove(cats[removedCat]);
-		}
-
-		@:privateAccess(Level)
-		for (c in cats) {
-			targets[c][Cat.getIndex()] = true;
-
-			var catBg = Assets.levels.getBitmap('Background${levelUID}_Cat${c + 1}');
-			level.root.add(catBg, Const.GAME_LEVEL_BG);
-		}
-
-		// Remove a clue if too many
-		var nbClues = 0;
-		for (b in targets[target]) {
-			if (b) nbClues++;
-		}
-		if (nbClues > 3) {
-			var removedClue = M.randRange(0, nbClues - 1);
-			for (i in 0...targets[target].length) {
-				if (targets[target][i] && removedClue == 0) {
-					targets[target][i] = false;
+		// Pick the attributes shared but not with everyone
+		var nbPicked = 0;
+		var peopleExcluded = new Array<Int>();
+		peopleExcluded.push(target);
+		for (attr in allAttrs) {
+			var sharedWAll = true;
+			for (i in 0...peopleShare.length) {
+				if (peopleExcluded.contains(i)) continue;
+				if (peopleShare[target][attr.getIndex()] != peopleShare[i][attr.getIndex()]) {
+					sharedWAll = false;
+					nbPicked++;
+					peopleExcluded.push(i);
 					break;
 				}
-				removedClue--;
+			}
+			
+			targetAttrs[attr.getIndex()] = !sharedWAll;
+		}
+		
+		while (nbPicked < 3) {
+			var n = M.randRange(0, allAttrs.length - 1 - nbPicked);
+			for (attr in allAttrs) {
+				if (targetAttrs[attr.getIndex()]) continue;
+				if (n == 0) {
+					nbPicked++;
+					targetAttrs[attr.getIndex()] = true;
+					break;
+				}
+				n--;
 			}
 		}
-
-		// -- Save the target's attrs list
-		targetAttrs = targets[target];
+		
+		targetHasCat = removedCat != target;
 		targetData = chosenChars[target];
+		hud.targetUpdated();
 	}
 
 	public function characterKilled(char : Character) {

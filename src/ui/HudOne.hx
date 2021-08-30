@@ -57,6 +57,7 @@ class HudOne extends dn.Process {
 				case HairColor: !game.targetData.hairColor;
 				case Trouser: !game.targetData.trouser;
 				case EyesClosed: !game.targetData.eyesClosed;
+				case Cat: !game.targetHasCat;
 				default: false;
 			};
 			if (striked) {
