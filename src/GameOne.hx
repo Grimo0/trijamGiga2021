@@ -196,6 +196,22 @@ class GameOne extends Game {
 			level.root.add(catBg, Const.GAME_LEVEL_BG);
 		}
 
+		// Remove a clue if too many
+		var nbClues = 0;
+		for (b in targets[target]) {
+			if (b) nbClues++;
+		}
+		if (nbClues > 3) {
+			var removedClue = M.randRange(0, nbClues - 1);
+			for (i in 0...targets[target].length) {
+				if (targets[target][i] && removedClue == 0) {
+					targets[target][i] = false;
+					break;
+				}
+				removedClue--;
+			}
+		}
+
 		// -- Save the target's attrs list
 		targetAttrs = targets[target];
 		targetData = chosenChars[target];
