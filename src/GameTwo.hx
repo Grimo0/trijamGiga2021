@@ -121,9 +121,11 @@ class GameTwo extends Game {
 		
 		death.state = Passive;	
 		
+		#if hl
 		delayer.addF(() -> {
 			hxd.Window.getInstance().event(new hxd.Event(hxd.Event.EventKind.EMove, root.getScene().mouseX, root.getScene().mouseY));
 		}, 1);
+		#end
 	}
 	
 	function onClick(e : hxd.Event) {
