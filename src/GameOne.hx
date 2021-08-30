@@ -9,6 +9,8 @@ class GameOne extends Game {
 		return savData;
 	}
 
+	public var hud : ui.HudOne;
+
 	var death : en.Death;
 	var ghostSpr : HSprite;
 	var targetData : Data.Characters;
@@ -18,6 +20,8 @@ class GameOne extends Game {
 	public function new() {
 		name = 'GameOne';
 		super();
+		
+		hud = new ui.HudOne();
 
 		death = new en.Death();
 		ghostSpr = new HSprite(Assets.entities, 'Ghost');

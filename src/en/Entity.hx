@@ -13,8 +13,6 @@ class Entity {
 	inline function get_utmod() return Game.ME.utmod;
 	public var tmod(get, never) : Float;
 	inline function get_tmod() return Game.ME.tmod;
-	public var hud(get, never) : ui.Hud;
-	inline function get_hud() return Game.ME.hud;
 
 	// Main properties
 	public var uid(default, null) : Int;

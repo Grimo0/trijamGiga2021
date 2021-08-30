@@ -20,9 +20,6 @@ class Game extends Process {
 	/** Level data **/
 	public var level : Level;
 
-	/** UI **/
-	public var hud : ui.Hud;
-
 	@:isVar public var sav(get, never) : GameSave;
 	public function get_sav() : GameSave {
 		return null;
@@ -68,7 +65,6 @@ class Game extends Process {
 		camera.frict = 0.1;
 		camera.targetS = 0.1;
 		fx = new Fx();
-		hud = new ui.Hud();
 
 		root.alpha = 0;
 		tw.createS(root.alpha, 1, #if debug 0 #else .3 #end);
