@@ -7,7 +7,13 @@ import dn.Process;
 class MainMenu extends Process {
 	public static var ME : MainMenu;
 
-	public var ca(default, null) : dn.heaps.Controller.ControllerAccess;
+	public var ca(default, null) : dn.heaps.Controller.ControllerAccess;	
+	
+	public var pxWid(get, never) : Int;
+	function get_pxWid() return M.ceil(w() / Const.UI_SCALE);
+
+	public var pxHei(get, never) : Int;
+	function get_pxHei() return M.ceil(h() / Const.UI_SCALE);
 	
 	var background : h2d.Bitmap;
 	var gameOne : h2d.Bitmap;
@@ -30,13 +36,13 @@ class MainMenu extends Process {
 		gameOne = Assets.ui.getBitmap('MainMenu_GameOne', root);
 		gameOne.width = gameOne.tile.width;
 		gameOne.height = gameOne.tile.height;
-		gameOne.filter = new h2d.filter.Glow(0x883333, .8, 100, 1, 1, true);
+		gameOne.filter = new h2d.filter.Glow(0xBB3333, .8, 100, 1, 1, true);
 		gameOne.filter.enable = false;
 
 		gameTwo = Assets.ui.getBitmap('MainMenu_GameTwo', root);
 		gameTwo.width = gameTwo.tile.width;
 		gameTwo.height = gameTwo.tile.height;
-		gameTwo.filter = new h2d.filter.Glow(0x883333, .8, 100, 1, 1, true);
+		gameTwo.filter = new h2d.filter.Glow(0xBB3333, .8, 100, 1, 1, true);
 		gameTwo.filter.enable = false;
 
 		var interactive = new Interactive(background.width, background.height, root);
@@ -73,11 +79,11 @@ class MainMenu extends Process {
 	override function onResize() {
 		super.onResize();
 
-		var scaleX = Const.DEFAULT_WIDTH / background.width;
-		var scaleY = Const.DEFAULT_HEIGHT / background.height;
+		var scaleX = pxWid / background.width;
+		var scaleY = pxHei / background.height;
 		root.setScale(scaleX > scaleY ? scaleX : scaleY);
-		root.x = (Const.DEFAULT_WIDTH - background.width * root.scaleX) / 2;
-		root.y = (Const.DEFAULT_HEIGHT - background.height * root.scaleY) / 2;
+		root.x = (pxWid - background.width * root.scaleX) / 2;
+		root.y = (pxHei - background.height * root.scaleY) / 2;
 	}
 
 	override function update() {
